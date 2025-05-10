@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-import { NeonText } from '@/components/ui/neon-text';
+
 import { CyberButton } from '@/components/ui/cyber-button';
 
 export function GameCard({ game }) {
@@ -23,23 +23,22 @@ export function GameCard({ game }) {
 
   return (
     <div className="group flex flex-col h-full bg-arcade-dark border-2 border-arcade-neon-blue/30 hover:border-arcade-neon-blue rounded-lg overflow-hidden transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,255,255,0.5)]">
-      <div className={`aspect-video ${['tetris', 'tictactoe'].includes(game.id) ? '' : bgColors[game.category]} relative overflow-hidden`}>
-        {['tetris', 'tictactoe'].includes(game.id) ? (
+      <div className={`aspect-video ${['tetris', 'tictactoe', 'snake'].includes(game.id) ? '' : bgColors[game.category]} relative overflow-hidden`}>
+        {['tetris', 'tictactoe', 'snake'].includes(game.id) ? (
           <img 
             src={game.id === 'tetris' 
               ? "https://res.cloudinary.com/dgzgzx9ov/image/upload/v1744797913/tetris_kvp48x.png"
-              : "https://res.cloudinary.com/dgzgzx9ov/image/upload/v1744799401/tictactoe_moa0pm.png"}
+              : game.id === 'tictactoe'
+              ? "https://res.cloudinary.com/dgzgzx9ov/image/upload/v1744799401/tictactoe_moa0pm.png"
+              : "https://res.cloudinary.com/dgzgzx9ov/image/upload/v1746722130/ChatGPT_Image_8_may_2025_18_31_36_axahjp.png"}
             alt={game.name}
             className="w-full h-full object-cover"
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
-            <NeonText 
-              color={textColors[game.category]} 
-              className="text-2xl opacity-70 group-hover:opacity-90 transition-opacity duration-300"
-            >
+            <span className="text-2xl opacity-70 group-hover:opacity-90 transition-opacity duration-300">
               {game.name}
-            </NeonText>
+            </span>
           </div>
         )}
       </div>
@@ -51,11 +50,7 @@ export function GameCard({ game }) {
             <span className={`font-pixel text-xs text-arcade-neon-${textColors[game.category]}`}>
               {game.category.charAt(0).toUpperCase() + game.category.slice(1)}
             </span>
-            <span className="text-xs text-gray-500">•</span>
-            <span className="font-pixel text-xs text-gray-400">
-              {game.difficulty === 'easy' ? 'Fácil' : 
-               game.difficulty === 'medium' ? 'Medio' : 'Difícil'}
-            </span>
+            
           </div>
           <p className="text-gray-400 text-sm mb-4 font-pixel">{game.description}</p>
         </div>

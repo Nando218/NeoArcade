@@ -2,8 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useScores } from '@/lib/scores';
 import { getGameById, GAMES } from '@/lib/games';
-import { NeonText } from '@/components/ui/neon-text';
-import { Trophy } from 'lucide-react';
+
 
 export function Leaderboard() {
   const [selectedGameId, setSelectedGameId] = useState('all');

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { NeonText } from "@/components/ui/neon-text";
+
 import { useAuth } from "@/lib/auth";
 import { ArcadeButton } from "@/components/ui/arcade-button";
 import { Menu, X, Trophy, User, LogOut, UserCog } from "lucide-react";
@@ -103,7 +103,7 @@ export function Navbar() {
               onClick={() => setIsMenuOpen(false)}
             >
               <Trophy size={18} />
-              <span>PUNTUACIONES</span>
+              <span>SCORES</span>
             </Link>
 
             {isAuthenticated && (
@@ -114,7 +114,7 @@ export function Navbar() {
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <User size={18} />
-                  <span>PERFIL</span>
+                  <span>PROFILE</span>
                 </Link>
 
                 {user?.role === "admin" && (
@@ -133,7 +133,7 @@ export function Navbar() {
                   onClick={handleLogout}
                 >
                   <LogOut size={18} />
-                  <span>SALIR</span>
+                  <span>LOG OUT</span>
                 </button>
               </>
             )}
@@ -143,14 +143,14 @@ export function Navbar() {
                 {location.pathname !== "/login" && (
                   <Link to="/login" onClick={() => setIsMenuOpen(false)}>
                     <ArcadeButton variant="blue" className="w-full">
-                      ENTRAR
+                      LOGIN
                     </ArcadeButton>
                   </Link>
                 )}
                 {location.pathname !== "/register" && (
                   <Link to="/register" onClick={() => setIsMenuOpen(false)}>
                     <ArcadeButton variant="pink" className="w-full">
-                      REGISTRO
+                      REGISTER
                     </ArcadeButton>
                   </Link>
                 )}
