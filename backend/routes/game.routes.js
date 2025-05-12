@@ -1,4 +1,3 @@
-
 const express = require('express');
 const { pool } = require('../config/db');
 const { verifyToken, isAdmin } = require('../middleware/auth.middleware');
@@ -51,34 +50,34 @@ router.get('/:id', async (req, res) => {
 // Add a new game (admin only)
 router.post('/', verifyToken, isAdmin, async (req, res) => {
   try {
-    const { id, name, description, image_url } = req.body;
+    const { name, description, image_url } = req.body;
     
-    if (!id || !name) {
-      return res.status(400).json({ message: 'Game ID and name are required' });
+    if (!name) {
+      return res.status(400).json({ message: 'Game name is required' });
     }
     
     const connection = await pool.getConnection();
     
-    // Check if the game ID already exists
+    // Check if the game name already exists
     const [existingGames] = await connection.query(
-      'SELECT id FROM games WHERE id = ?',
-      [id]
+      'SELECT name FROM games WHERE name = ?',
+      [name]
     );
     
     if (existingGames.length > 0) {
       connection.release();
-      return res.status(409).json({ message: 'Game ID already exists' });
+      return res.status(409).json({ message: 'Game with this name already exists' });
     }
     
     // Add the game
-    await connection.query(
-      'INSERT INTO games (id, name, description, image_url) VALUES (?, ?, ?, ?)',
-      [id, name, description || null, image_url || null]
+    const [result] = await connection.query(
+      'INSERT INTO games (name, description, image_url) VALUES (?, ?, ?)',
+      [name, description || null, image_url || null]
     );
     
     const [newGame] = await connection.query(
       'SELECT * FROM games WHERE id = ?',
-      [id]
+      [result.insertId]
     );
     
     connection.release();

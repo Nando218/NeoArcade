@@ -1,114 +1,109 @@
-
-const mysql = require('mysql2/promise');
+const { Pool } = require('pg');
 const dotenv = require('dotenv');
+const bcrypt = require('bcrypt');
 
 dotenv.config();
 
-// Create a connection pool
-const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
+// Crear pool de conexión con Neon (PostgreSQL)
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false, // Necesario para conexiones SSL como Neon
+  },
 });
 
-// Test the connection
+// Test de conexión
 async function testConnection() {
   try {
-    console.log('Attempting to connect to MySQL database...');
-    console.log(`Host: ${process.env.DB_HOST}`);
-    console.log(`User: ${process.env.DB_USER}`);
-    console.log(`Database: ${process.env.DB_NAME}`);
-    
-    const connection = await pool.getConnection();
+    console.log('Attempting to connect to PostgreSQL database...');
+    const client = await pool.connect();
     console.log('Database connected successfully');
-    connection.release();
+    client.release();
   } catch (error) {
     console.error('Database connection failed:', error);
     process.exit(1);
   }
 }
 
-// Initialize database tables if they don't exist
+// Inicializar tablas y datos por defecto
 async function initDb() {
+  const client = await pool.connect();
   try {
-    const connection = await pool.getConnection();
-    
-    // Create users table
-    await connection.query(`
+    await client.query('BEGIN');
+
+    // Tabla de usuarios
+    await client.query(`
       CREATE TABLE IF NOT EXISTS users (
-        id INT PRIMARY KEY AUTO_INCREMENT,
+        id SERIAL PRIMARY KEY,
         username VARCHAR(50) NOT NULL UNIQUE,
         email VARCHAR(100) NOT NULL UNIQUE,
-        password VARCHAR(255) NOT NULL,
-        role ENUM('user', 'admin') DEFAULT 'user',
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
+        password TEXT NOT NULL,
+        role TEXT CHECK (role IN ('user', 'admin')) DEFAULT 'user',
+        created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+      );
     `);
-    
-    // Create games table
-    await connection.query(`
+
+    // Tabla de juegos
+    await client.query(`
       CREATE TABLE IF NOT EXISTS games (
         id VARCHAR(50) PRIMARY KEY,
         name VARCHAR(100) NOT NULL,
         description TEXT,
-        image_url VARCHAR(255),
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
+        image_url TEXT,
+        created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+      );
     `);
-    
-    // Create scores table
-    await connection.query(`
+
+    // Tabla de puntuaciones
+    await client.query(`
       CREATE TABLE IF NOT EXISTS scores (
-        id INT PRIMARY KEY AUTO_INCREMENT,
-        user_id INT NOT NULL,
-        game_id VARCHAR(50) NOT NULL,
-        points INT NOT NULL,
-        date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-        FOREIGN KEY (game_id) REFERENCES games(id) ON DELETE CASCADE
-      )
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        game_id VARCHAR(50) NOT NULL REFERENCES games(id) ON DELETE CASCADE,
+        points INTEGER NOT NULL,
+        date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+      );
     `);
-    
-    // Insert default games
-    await connection.query(`
-      INSERT IGNORE INTO games (id, name, description, image_url) VALUES
-      ('tetris', 'Tetris', 'El clásico juego de bloques ruso', '/images/games/tetris.jpg'),
-      ('tictactoe', 'Tres en Raya', 'Clásico juego de X y O', '/images/games/tictactoe.jpg'),
-      ('snake', 'Snake', 'Controla una serpiente y come manzanas', '/images/games/snake.jpg'),
-      ('pong', 'Pong', 'El primer videojuego arcade de la historia', '/images/games/pong.jpg')
+
+    // Juegos por defecto
+    await client.query(`
+      INSERT INTO games (id, name, description, image_url)
+      VALUES
+        ('tetris', 'Tetris', 'El clásico juego de bloques ruso', '/images/games/tetris.jpg'),
+        ('tictactoe', 'Tres en Raya', 'Clásico juego de X y O', '/images/games/tictactoe.jpg'),
+        ('snake', 'Snake', 'Controla una serpiente y come manzanas', '/images/games/snake.jpg'),
+        ('pong', 'Pong', 'El primer videojuego arcade de la historia', '/images/games/pong.jpg')
+      ON CONFLICT (id) DO NOTHING;
     `);
-    
-    // Insert default admin user
-    const bcrypt = require('bcrypt');
-    const hashedPassword = await bcrypt.hash('admin123', 10);
-    
-    await connection.query(`
-      INSERT IGNORE INTO users (username, email, password, role) VALUES
-      ('admin', 'admin@arcade.com', ?, 'admin')
-    `, [hashedPassword]);
-    
-    // Insert default regular user
+
+    // Usuario admin
+    const adminHashedPassword = await bcrypt.hash('admin123', 10);
+    await client.query(`
+      INSERT INTO users (username, email, password, role)
+      VALUES ('admin', 'admin@arcade.com', $1, 'admin')
+      ON CONFLICT (username) DO NOTHING;
+    `, [adminHashedPassword]);
+
+    // Usuario normal
     const userHashedPassword = await bcrypt.hash('user123', 10);
-    
-    await connection.query(`
-      INSERT IGNORE INTO users (username, email, password, role) VALUES
-      ('user', 'user@arcade.com', ?, 'user')
+    await client.query(`
+      INSERT INTO users (username, email, password, role)
+      VALUES ('user', 'user@arcade.com', $1, 'user')
+      ON CONFLICT (username) DO NOTHING;
     `, [userHashedPassword]);
-    
+
+    await client.query('COMMIT');
     console.log('Database tables initialized successfully');
-    connection.release();
   } catch (error) {
+    await client.query('ROLLBACK');
     console.error('Error initializing database:', error);
+  } finally {
+    client.release();
   }
 }
 
-// Export pool for use in other files
 module.exports = {
   pool,
   testConnection,
-  initDb
+  initDb,
 };

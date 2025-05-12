@@ -1,4 +1,3 @@
-
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -15,58 +14,45 @@ router.post('/register', async (req, res) => {
     if (!username || !email || !password) {
       return res.status(400).json({ message: 'All fields are required' });
     }
+
+    // Verifica si el usuario ya existe
+    const client = await pool.connect();
+    const existingEmails = await client.query('SELECT * FROM users WHERE email = $1', [email]);
     
-    const connection = await pool.getConnection();
-    
-    // Check if user already exists - first check email
-    const [existingEmails] = await connection.query(
-      'SELECT * FROM users WHERE email = ?',
-      [email]
-    );
-    
-    if (existingEmails.length > 0) {
-      connection.release();
+    if (existingEmails.rows.length > 0) {
+      client.release();
       return res.status(409).json({ message: 'Email already exists' });
     }
+
+    // Verifica si el nombre de usuario ya existe
+    const existingUsernames = await client.query('SELECT * FROM users WHERE username = $1', [username]);
     
-    // Then check username
-    const [existingUsernames] = await connection.query(
-      'SELECT * FROM users WHERE username = ?',
-      [username]
-    );
-    
-    if (existingUsernames.length > 0) {
-      connection.release();
+    if (existingUsernames.rows.length > 0) {
+      client.release();
       return res.status(409).json({ message: 'Username already exists' });
     }
     
-    // Hash password
+    // Hash de la contraseña
     const hashedPassword = await bcrypt.hash(password, 10);
     
-    // Create new user
-    const [result] = await connection.query(
-      'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
+    // Crear nuevo usuario
+    const result = await client.query(
+      'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id, username, email, role',
       [username, email, hashedPassword]
     );
+
+    client.release();
     
-    // Get the newly created user
-    const [newUser] = await connection.query(
-      'SELECT id, username, email, role FROM users WHERE id = ?',
-      [result.insertId]
-    );
-    
-    connection.release();
-    
-    // Generate JWT token
+    // Generar token JWT
     const token = jwt.sign(
-      { id: newUser[0].id, role: newUser[0].role },
+      { id: result.rows[0].id, role: result.rows[0].role },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN }
     );
     
     res.status(201).json({
       message: 'User registered successfully',
-      user: newUser[0],
+      user: result.rows[0],
       token
     });
   } catch (error) {
@@ -86,27 +72,24 @@ router.post('/login', async (req, res) => {
       console.log('Login failed: Missing email or password');
       return res.status(400).json({ message: 'Email and password are required' });
     }
+
+    const client = await pool.connect();
     
-    const connection = await pool.getConnection();
+    // Buscar usuario por email
+    const users = await client.query('SELECT * FROM users WHERE email = $1', [email]);
     
-    // Find user by email
-    const [users] = await connection.query(
-      'SELECT * FROM users WHERE email = ?',
-      [email]
-    );
+    console.log('User found in database:', users.rows.length > 0);
     
-    console.log('User found in database:', users.length > 0);
+    client.release();
     
-    connection.release();
-    
-    if (users.length === 0) {
+    if (users.rows.length === 0) {
       console.log('Login failed: User not found');
       return res.status(401).json({ message: 'Invalid credentials' });
     }
     
-    const user = users[0];
+    const user = users.rows[0];
     
-    // Check password
+    // Verificar contraseña
     const isPasswordValid = await bcrypt.compare(password, user.password);
     
     console.log('Password validation:', isPasswordValid);
@@ -116,14 +99,14 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
     
-    // Generate JWT token
+    // Generar token JWT
     const token = jwt.sign(
       { id: user.id, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN }
     );
     
-    // Remove password from response
+    // Eliminar la contraseña del objeto de usuario
     const { password: _, ...userWithoutPassword } = user;
     
     res.status(200).json({
@@ -140,20 +123,20 @@ router.post('/login', async (req, res) => {
 // Get current user profile
 router.get('/me', verifyToken, async (req, res) => {
   try {
-    const connection = await pool.getConnection();
+    const client = await pool.connect();
     
-    const [users] = await connection.query(
-      'SELECT id, username, email, role FROM users WHERE id = ?',
+    const users = await client.query(
+      'SELECT id, username, email, role FROM users WHERE id = $1',
       [req.userId]
     );
     
-    connection.release();
+    client.release();
     
-    if (users.length === 0) {
+    if (users.rows.length === 0) {
       return res.status(404).json({ message: 'User not found' });
     }
     
-    res.status(200).json({ user: users[0] });
+    res.status(200).json({ user: users.rows[0] });
   } catch (error) {
     console.error('Get profile error:', error);
     res.status(500).json({ message: 'Failed to get profile' });
@@ -165,16 +148,16 @@ router.get('/me', verifyToken, async (req, res) => {
 // Get all users (admin only)
 router.get('/users', verifyToken, isAdmin, async (req, res) => {
   try {
-    const connection = await pool.getConnection();
+    const client = await pool.connect();
     
-    const [users] = await connection.query(
+    const users = await client.query(
       'SELECT id, username, email, role, created_at FROM users'
     );
     
-    connection.release();
+    client.release();
     
     // Remove sensitive information
-    const safeUsers = users.map(user => {
+    const safeUsers = users.rows.map(user => {
       const { password, ...userWithoutPassword } = user;
       return userWithoutPassword;
     });
@@ -196,26 +179,25 @@ router.delete('/users/:id', verifyToken, isAdmin, async (req, res) => {
       return res.status(400).json({ message: 'Cannot delete your own account' });
     }
     
-    const connection = await pool.getConnection();
+    const client = await pool.connect();
     
-    // Check if user exists
-    const [users] = await connection.query(
-      'SELECT * FROM users WHERE id = ?',
+    const users = await client.query(
+      'SELECT * FROM users WHERE id = $1',
       [id]
     );
     
-    if (users.length === 0) {
-      connection.release();
+    if (users.rows.length === 0) {
+      client.release();
       return res.status(404).json({ message: 'User not found' });
     }
     
     // Delete user
-    await connection.query(
-      'DELETE FROM users WHERE id = ?',
+    await client.query(
+      'DELETE FROM users WHERE id = $1',
       [id]
     );
     
-    connection.release();
+    client.release();
     
     res.status(200).json({ message: 'User deleted successfully' });
   } catch (error) {
@@ -239,36 +221,34 @@ router.patch('/users/:id/role', verifyToken, isAdmin, async (req, res) => {
       return res.status(400).json({ message: 'Cannot change your own role' });
     }
     
-    const connection = await pool.getConnection();
+    const client = await pool.connect();
     
-    // Check if user exists
-    const [users] = await connection.query(
-      'SELECT * FROM users WHERE id = ?',
+    const users = await client.query(
+      'SELECT * FROM users WHERE id = $1',
       [id]
     );
     
-    if (users.length === 0) {
-      connection.release();
+    if (users.rows.length === 0) {
+      client.release();
       return res.status(404).json({ message: 'User not found' });
     }
     
     // Update user role
-    await connection.query(
-      'UPDATE users SET role = ? WHERE id = ?',
+    await client.query(
+      'UPDATE users SET role = $1 WHERE id = $2',
       [role, id]
     );
     
-    // Get updated user
-    const [updatedUsers] = await connection.query(
-      'SELECT id, username, email, role FROM users WHERE id = ?',
+    const updatedUsers = await client.query(
+      'SELECT id, username, email, role FROM users WHERE id = $1',
       [id]
     );
     
-    connection.release();
+    client.release();
     
     res.status(200).json({ 
       message: 'User role updated successfully',
-      user: updatedUsers[0]
+      user: updatedUsers.rows[0]
     });
   } catch (error) {
     console.error('Update user role error:', error);

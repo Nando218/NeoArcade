@@ -1,4 +1,3 @@
-
 const express = require('express');
 const { pool } = require('../config/db');
 const { verifyToken } = require('../middleware/auth.middleware');
@@ -103,32 +102,42 @@ router.get('/user/:userId', async (req, res) => {
 // Add a new score
 router.post('/', verifyToken, async (req, res) => {
   try {
+    // Log para verificar los datos recibidos
+    console.log("Datos recibidos:", req.body);  // Aquí vemos qué datos llegan
+    console.log('BODY:', req.body);
+    console.log('USER ID:', req.userId);
+
     const { gameId, points } = req.body;
-    
+
     if (!gameId || points === undefined) {
       return res.status(400).json({ message: 'Game ID and points are required' });
     }
-    
+
     const connection = await pool.getConnection();
     
     // Check if the game exists
-    const [games] = await connection.query(
-      'SELECT id FROM games WHERE id = ?',
-      [gameId]
-    );
+    const [games] = await connection.query('SELECT id FROM games WHERE id = ?', [gameId]);
     
     if (games.length === 0) {
       connection.release();
       return res.status(404).json({ message: 'Game not found' });
     }
     
-    // Add the score
+    // Ensure that the user is valid (though `verifyToken` already handles this, it's good practice)
+    const [user] = await connection.query('SELECT id FROM users WHERE id = ?', [req.userId]);
+    
+    if (user.length === 0) {
+      connection.release();
+      return res.status(404).json({ message: 'User not found' });
+    }
+    
+    // Add the score to the database
     const [result] = await connection.query(
       'INSERT INTO scores (user_id, game_id, points) VALUES (?, ?, ?)',
       [req.userId, gameId, points]
     );
-    
-    // Get the complete score entry
+
+    // Retrieve the newly created score entry
     const [scoreEntries] = await connection.query(`
       SELECT 
         s.id, 
