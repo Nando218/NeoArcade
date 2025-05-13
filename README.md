@@ -17,15 +17,15 @@
 
 ## 🚀 How to Install the Project
 
-Clone the repository: https://github.com/Nando218/RewindArcade.git
-Open a terminal and navigate to the root folder.
-Run: cd backend
-Run: npm install
-Run: npm run dev
-Open a new terminal and stay in the root folder.
-Run: npm install
-Run: npm run dev
-Click on: http://localhost:8080/
+- Clone the repository: https://github.com/Nando218/RewindArcade.git
+- Open a terminal and navigate to the root folder.
+- Run: cd backend
+- Run: npm install
+- Run: npm run dev
+- Open a new terminal and stay in the root folder.
+- Run: npm install
+- Run: npm run dev
+- Click on: http://localhost:8080/
 
 
 ## 🚧 Coming soon:
