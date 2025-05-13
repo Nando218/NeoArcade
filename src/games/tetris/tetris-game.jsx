@@ -812,7 +812,7 @@ export function TetrisGame() {
         {/* Side panel with next piece and instructions */}
         <div className={`flex flex-col gap-4 ${isMobile ? "w-full mt-4" : "w-[220px]"}`}>
           {/* Next piece preview */}
-          <div className="bg-arcade-dark border border-arcade-neon-blue/30 rounded-md p-3">
+          <div className="bg-arcade-dark p-3">
             <h3 className="text-arcade-neon-blue font-pixel mb-2 text-center">Next Piece:</h3>
             <div className="flex justify-center">
               <canvas 
@@ -831,20 +831,11 @@ export function TetrisGame() {
               <li>⬅️ ➡️ : Move piece</li>
               <li>⬇️ : Move down</li>
               <li>⬆️ : Rotate</li>
-              <li>Space : Hard drop</li>
+              
             </ul>
           </div>
           
-          {/* Scoring */}
-          <div className="bg-arcade-dark border border-arcade-neon-blue/30 rounded-md p-3">
-            <h3 className="text-arcade-neon-blue font-pixel mb-2">Points:</h3>
-            <ul className="text-sm text-gray-300 font-pixel space-y-1">
-              <li>1 line: 40 × level</li>
-              <li>2 lines: 100 × level</li>
-              <li>3 lines: 300 × level</li>
-              <li>4 lines: 1200 × level</li>
-            </ul>
-          </div>
+          
         </div>
       </div>
     </div>

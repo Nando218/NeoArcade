@@ -420,7 +420,7 @@ export function SnakeGame() {
         </div>
 
         {/* Side panel with instructions */}
-        <div className={`flex flex-col gap-4 ${isMobile ? "w-full mt-4" : "w-[220px] mt-8"}`}>
+        <div className={`flex flex-col gap-4 ${isMobile ? "w-full mt-4" : "w-[220px] mt-48"}`}>
           <div className="bg-arcade-dark border border-arcade-neon-green/30 rounded-md p-3">
             <h3 className="text-arcade-neon-green font-pixel mb-2">Controls:</h3>
             <ul className="text-sm text-gray-300 font-pixel space-y-1">
@@ -429,15 +429,7 @@ export function SnakeGame() {
             </ul>
           </div>
           
-          <div className="bg-arcade-dark border border-arcade-neon-green/30 rounded-md p-3">
-            <h3 className="text-arcade-neon-green font-pixel mb-2">Rules:</h3>
-            <ul className="text-sm text-gray-300 font-pixel space-y-1">
-              <li>Eat the red food to grow</li>
-              <li>Don't hit the walls</li>
-              <li>Don't hit yourself</li>
-              <li>+10 points per food</li>
-            </ul>
-          </div>
+          
         </div>
       </div>
     </div>

@@ -2,13 +2,43 @@
 import { useState, useEffect } from 'react';
 import { useScores } from '@/lib/scores';
 import { getGameById, GAMES } from '@/lib/games';
-
+import { toast } from "@/components/ui/use-toast";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export function Leaderboard() {
   const [selectedGameId, setSelectedGameId] = useState('all');
   const [scores, setScores] = useState([]);
-  const { getScoresByGame, scores: allScores } = useScores();
+  const { getScoresByGame, fetchScoresByGame, scores: allScores, isLoading, error } = useScores();
   
+  // Cargar todas las puntuaciones al inicio
+  useEffect(() => {
+    const loadScores = async () => {
+      try {
+        // Cargar puntuaciones para todos los juegos
+        for (const game of GAMES) {
+          await fetchScoresByGame(game.id);
+        }
+      } catch (err) {
+        console.error('Error loading scores:', err);
+        toast({
+          title: "Error",
+          description: "No se pudieron cargar las puntuaciones",
+          variant: "destructive",
+        });
+      }
+    };
+    
+    loadScores();
+  }, [fetchScoresByGame]);
+  
+  // Actualizar las puntuaciones mostradas cuando cambie la selección o las puntuaciones
   useEffect(() => {
     if (selectedGameId === 'all') {
       // Ordenar por puntuación de mayor a menor
@@ -34,14 +64,28 @@ export function Leaderboard() {
     return game ? game.name : gameId;
   };
 
+  if (isLoading) {
+    return (
+      <div className="w-full text-center py-8">
+        <p className="text-arcade-neon-blue font-pixel">Loading scores...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="w-full text-center py-8">
+        <p className="text-red-500 font-pixel">Error: {error}</p>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full max-w-4xl mx-auto">
       <div className="flex flex-col items-center mb-8">
         <div className="flex items-center gap-2 mb-4">
-         
-          
+          {/* Controles futuros aquí */}
         </div>
-        
       </div>
       
       <div className="bg-arcade-dark border-2 border-arcade-neon-blue/50 rounded-lg shadow-[0_0_10px_rgba(0,255,0,0.3)] overflow-hidden">
@@ -61,68 +105,68 @@ export function Leaderboard() {
         </div>
         
         <div className="overflow-x-auto">
-          <table className="min-w-full">
-            <thead>
-              <tr className="bg-arcade-neon-blue/10 border-b border-arcade-neon-blue/30">
-                <th className="px-6 py-3 text-left text-sm font-medium text-arcade-neon-blue font-pixel tracking-wider">
-                  Rankin
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-arcade-neon-blue font-pixel tracking-wider">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-arcade-neon-blue/10 border-b border-arcade-neon-blue/30">
+                <TableHead className="px-6 py-3 text-left text-sm font-medium text-arcade-neon-blue font-pixel tracking-wider">
+                  Ranking
+                </TableHead>
+                <TableHead className="px-6 py-3 text-left text-sm font-medium text-arcade-neon-blue font-pixel tracking-wider">
                   Player
-                </th>
+                </TableHead>
                 {selectedGameId === 'all' && (
-                  <th className="px-6 py-3 text-left text-sm font-medium text-arcade-neon-blue font-pixel tracking-wider">
+                  <TableHead className="px-6 py-3 text-left text-sm font-medium text-arcade-neon-blue font-pixel tracking-wider">
                     Game
-                  </th>
+                  </TableHead>
                 )}
-                <th className="px-6 py-3 text-left text-sm font-medium text-arcade-neon-blue font-pixel tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-sm font-medium text-arcade-neon-blue font-pixel tracking-wider">
                   Score
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-arcade-neon-blue font-pixel tracking-wider">
+                </TableHead>
+                <TableHead className="px-6 py-3 text-left text-sm font-medium text-arcade-neon-blue font-pixel tracking-wider">
                   Date
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-arcade-neon-blue/20">
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody className="divide-y divide-arcade-neon-blue/20">
               {scores.length > 0 ? (
                 scores.map((score, index) => (
-                  <tr key={score.id} className="hover:bg-arcade-neon-blue/5">
-                    <td className="px-6 py-4 whitespace-nowrap">
+                  <TableRow key={score.id} className="hover:bg-arcade-neon-blue/5">
+                    <TableCell className="px-6 py-4 whitespace-nowrap">
                       <div className="font-pixel text-white">
                         {index === 0 && <span className="text-blue-300">🏆</span>}
                         {index === 1 && <span className="text-gray-300">🥈</span>}
                         {index === 2 && <span className="text-amber-600">🥉</span>}
                         {index > 2 && <span>{index + 1}</span>}
                       </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap font-pixel text-white">
+                    </TableCell>
+                    <TableCell className="px-6 py-4 whitespace-nowrap font-pixel text-white">
                       {score.username}
-                    </td>
+                    </TableCell>
                     {selectedGameId === 'all' && (
-                      <td className="px-6 py-4 whitespace-nowrap font-pixel text-gray-300">
+                      <TableCell className="px-6 py-4 whitespace-nowrap font-pixel text-gray-300">
                         {getGameName(score.gameId)}
-                      </td>
+                      </TableCell>
                     )}
-                    <td className="px-6 py-4 whitespace-nowrap font-pixel text-arcade-neon-blue">
+                    <TableCell className="px-6 py-4 whitespace-nowrap font-pixel text-arcade-neon-blue">
                       {score.points.toLocaleString()}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap font-pixel text-gray-400">
+                    </TableCell>
+                    <TableCell className="px-6 py-4 whitespace-nowrap font-pixel text-gray-400">
                       {formatDate(score.date)}
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ))
               ) : (
-                <tr>
-                  <td 
+                <TableRow>
+                  <TableCell 
                     colSpan={selectedGameId === 'all' ? 5 : 4} 
                     className="px-6 py-8 text-center text-gray-500 font-pixel"
                   >
                     No scores available
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               )}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
       </div>
     </div>

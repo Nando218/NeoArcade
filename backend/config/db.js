@@ -1,3 +1,4 @@
+
 const { Pool } = require('pg');
 const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
@@ -12,16 +13,18 @@ const pool = new Pool({
   },
 });
 
-// Test de conexión
+// Test de conexión y logging mejorado
 async function testConnection() {
   try {
-    console.log('Attempting to connect to PostgreSQL database...');
+    console.log('Attempting to connect to PostgreSQL database with Neon...');
+    console.log('Connection string:', process.env.DATABASE_URL ? 'Defined' : 'Undefined');
     const client = await pool.connect();
-    console.log('Database connected successfully');
+    console.log('✅ Database connected successfully to Neon');
     client.release();
+    return true;
   } catch (error) {
-    console.error('Database connection failed:', error);
-    process.exit(1);
+    console.error('❌ Database connection failed:', error);
+    return false;
   }
 }
 
@@ -72,7 +75,10 @@ async function initDb() {
         ('tetris', 'Tetris', 'El clásico juego de bloques ruso', '/images/games/tetris.jpg'),
         ('tictactoe', 'Tres en Raya', 'Clásico juego de X y O', '/images/games/tictactoe.jpg'),
         ('snake', 'Snake', 'Controla una serpiente y come manzanas', '/images/games/snake.jpg'),
-        ('pong', 'Pong', 'El primer videojuego arcade de la historia', '/images/games/pong.jpg')
+        ('pong', 'Pong', 'El primer videojuego arcade de la historia', '/images/games/pong.jpg'),
+        ('pacman', 'Pac-Man', 'Come todos los puntos mientras evitas los fantasmas', '/images/games/pacman.jpg'),
+        ('arkanoid', 'Arkanoid', 'Destruye todos los bloques con la bola', '/images/games/arkanoid.jpg'),
+        ('connect4', 'Connect 4', 'Conecta cuatro fichas del mismo color', '/images/games/connect4.jpg')
       ON CONFLICT (id) DO NOTHING;
     `);
 
@@ -93,10 +99,10 @@ async function initDb() {
     `, [userHashedPassword]);
 
     await client.query('COMMIT');
-    console.log('Database tables initialized successfully');
+    console.log('✅ Database tables initialized successfully');
   } catch (error) {
     await client.query('ROLLBACK');
-    console.error('Error initializing database:', error);
+    console.error('❌ Error initializing database:', error);
   } finally {
     client.release();
   }

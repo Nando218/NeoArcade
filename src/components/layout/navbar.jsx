@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
 import { useAuth } from "@/lib/auth";
-import { ArcadeButton } from "@/components/ui/arcade-button";
-import { Menu, X, Trophy, User, LogOut, UserCog } from "lucide-react";
+
+import { Menu, X, User, LogOut, UserCog } from "lucide-react";
 import { NeoArcadelogo } from "@/components/ui/neo-arcade-logo";
 import { CyberButton } from "@/components/ui/cyber-button";
 
@@ -58,10 +58,8 @@ export function Navbar() {
               <span className="text-gray-400 font-pixel">{user?.username}</span>
               <CyberButton
                 variant="ghost"
-               
                 glowing={false}
                 onClick={handleLogout}
-                
               >
                 LOGOUT
               </CyberButton>
@@ -75,9 +73,7 @@ export function Navbar() {
               )}
               {location.pathname !== "/register" && (
                 <Link to="/register">
-                  <CyberButton >
-                    REGISTER
-                  </CyberButton>
+                  <CyberButton>REGISTER</CyberButton>
                 </Link>
               )}
             </div>
@@ -102,7 +98,6 @@ export function Navbar() {
               className="flex items-center gap-2 text-gray-300 hover:text-arcade-neon-blue transition-colors font-pixel py-2"
               onClick={() => setIsMenuOpen(false)}
             >
-              <Trophy size={18} />
               <span>SCORES</span>
             </Link>
 
@@ -142,16 +137,16 @@ export function Navbar() {
               <div className="flex gap-2 pt-2">
                 {location.pathname !== "/login" && (
                   <Link to="/login" onClick={() => setIsMenuOpen(false)}>
-                    <ArcadeButton variant="blue" className="w-full">
+                    <CyberButton variant="blue" className="w-full">
                       LOGIN
-                    </ArcadeButton>
+                    </CyberButton>
                   </Link>
                 )}
                 {location.pathname !== "/register" && (
                   <Link to="/register" onClick={() => setIsMenuOpen(false)}>
-                    <ArcadeButton variant="pink" className="w-full">
+                    <CyberButton variant="blue" className="w-full">
                       REGISTER
-                    </ArcadeButton>
+                    </CyberButton>
                   </Link>
                 )}
               </div>

@@ -11,23 +11,29 @@ export type Database = {
     Tables: {
       games: {
         Row: {
+          active: boolean
           created_at: string | null
           description: string | null
-          id: string
+          game_type: string
+          id: number
           image_url: string | null
           name: string
         }
         Insert: {
+          active?: boolean
           created_at?: string | null
           description?: string | null
-          id: string
+          game_type?: string
+          id?: number
           image_url?: string | null
           name: string
         }
         Update: {
+          active?: boolean
           created_at?: string | null
           description?: string | null
-          id?: string
+          game_type?: string
+          id?: number
           image_url?: string | null
           name?: string
         }
@@ -35,25 +41,25 @@ export type Database = {
       }
       scores: {
         Row: {
-          date: string | null
-          game_id: string
-          id: string
-          points: number
-          user_id: string
+          created_at: string | null
+          game_id: number | null
+          id: number
+          score: number
+          user_id: number | null
         }
         Insert: {
-          date?: string | null
-          game_id: string
-          id?: string
-          points: number
-          user_id: string
+          created_at?: string | null
+          game_id?: number | null
+          id?: number
+          score: number
+          user_id?: number | null
         }
         Update: {
-          date?: string | null
-          game_id?: string
-          id?: string
-          points?: number
-          user_id?: string
+          created_at?: string | null
+          game_id?: number | null
+          id?: number
+          score?: number
+          user_id?: number | null
         }
         Relationships: [
           {
@@ -76,7 +82,7 @@ export type Database = {
         Row: {
           created_at: string | null
           email: string
-          id: string
+          id: number
           password: string
           role: string
           username: string
@@ -84,15 +90,15 @@ export type Database = {
         Insert: {
           created_at?: string | null
           email: string
-          id?: string
+          id?: number
           password: string
-          role?: string
+          role: string
           username: string
         }
         Update: {
           created_at?: string | null
           email?: string
-          id?: string
+          id?: number
           password?: string
           role?: string
           username?: string

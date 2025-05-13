@@ -1,6 +1,7 @@
 
 import { create } from 'zustand';
 import { scoreAPI } from './api';
+import { toast } from "@/hooks/use-toast";
 
 // Normalización de datos de la API
 const normalizeScore = (apiScore) => ({
@@ -21,7 +22,10 @@ export const useScores = create((set, get) => ({
     set({ isLoading: true, error: null });
     
     try {
+      console.log(`Trying to add score: gameId=${gameId}, points=${points}`);
       const response = await scoreAPI.addScore(gameId, points);
+      console.log('Score added successfully:', response);
+      
       const normalizedScore = normalizeScore(response.score);
       
       set((state) => ({
@@ -29,22 +33,48 @@ export const useScores = create((set, get) => ({
         isLoading: false
       }));
       
+      toast({
+        title: "¡Puntuación guardada!",
+        description: `Se han registrado ${points} puntos en ${gameId}.`,
+      });
+      
       return true;
     } catch (error) {
       console.error('Failed to add score:', error);
+      
+      const errorMessage = error.response?.data?.message || error.message || 'Error al guardar la puntuación';
+      
       set({ 
         isLoading: false, 
-        error: error instanceof Error ? error.message : 'Failed to add score' 
+        error: errorMessage
       });
+      
+      toast({
+        title: "Error al guardar puntuación",
+        description: errorMessage,
+        variant: "destructive",
+      });
+      
       return false;
     }
   },
   
   fetchScoresByGame: async (gameId, limit) => {
-    set({ isLoading: true, error: null });
+    set(state => ({ 
+      ...state,
+      isLoading: true, 
+      error: null 
+    }));
     
     try {
+      console.log(`Fetching scores for game: ${gameId}, limit: ${limit}`);
       const response = await scoreAPI.getGameScores(gameId, limit);
+      console.log('Received scores:', response);
+      
+      if (!response.scores || !Array.isArray(response.scores)) {
+        throw new Error('Invalid response format: scores array is missing');
+      }
+      
       const normalizedScores = response.scores.map(normalizeScore);
       
       set((state) => {
@@ -61,10 +91,20 @@ export const useScores = create((set, get) => ({
       return normalizedScores;
     } catch (error) {
       console.error('Failed to fetch game scores:', error);
+      
+      const errorMessage = error.response?.data?.message || error.message || 'Error al cargar las puntuaciones';
+      
       set({ 
         isLoading: false, 
-        error: error instanceof Error ? error.message : 'Failed to fetch game scores' 
+        error: errorMessage
       });
+      
+      toast({
+        title: "Error de carga",
+        description: errorMessage,
+        variant: "destructive",
+      });
+      
       return [];
     }
   },
@@ -73,7 +113,14 @@ export const useScores = create((set, get) => ({
     set({ isLoading: true, error: null });
     
     try {
+      console.log(`Fetching scores for user: ${userId}`);
       const response = await scoreAPI.getUserScores(userId.toString());
+      console.log('Received user scores:', response);
+      
+      if (!response.scores || !Array.isArray(response.scores)) {
+        throw new Error('Invalid response format: scores array is missing');
+      }
+      
       const normalizedScores = response.scores.map(normalizeScore);
       
       set((state) => {
@@ -90,10 +137,20 @@ export const useScores = create((set, get) => ({
       return normalizedScores;
     } catch (error) {
       console.error('Failed to fetch user scores:', error);
+      
+      const errorMessage = error.response?.data?.message || error.message || 'Error al cargar las puntuaciones del usuario';
+      
       set({ 
         isLoading: false, 
-        error: error instanceof Error ? error.message : 'Failed to fetch user scores' 
+        error: errorMessage
       });
+      
+      toast({
+        title: "Error de carga",
+        description: errorMessage,
+        variant: "destructive",
+      });
+      
       return [];
     }
   },

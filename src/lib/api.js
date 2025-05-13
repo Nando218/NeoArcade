@@ -3,7 +3,8 @@ import axios from 'axios';
 
 // Create axios instance with improved error handling
 const api = axios.create({
-  baseURL: 'http://localhost:3001/api',
+  // Usar URL relativa para que funcione con el proxy de Vite
+  baseURL: '/api',
   headers: {
     'Content-Type': 'application/json'
   },
@@ -94,22 +95,30 @@ export const authAPI = {
 // Score API
 export const scoreAPI = {
   getAllScores: async () => {
+    console.log('Fetching all scores');
     const response = await api.get('/scores');
+    console.log('Scores received:', response.data);
     return response.data;
   },
   
   getGameScores: async (gameId, limit) => {
+    console.log(`Fetching scores for game ${gameId} with limit ${limit}`);
     const response = await api.get(`/scores/game/${gameId}${limit ? `?limit=${limit}` : ''}`);
+    console.log('Game scores received:', response.data);
     return response.data;
   },
   
   getUserScores: async (userId) => {
+    console.log(`Fetching scores for user ${userId}`);
     const response = await api.get(`/scores/user/${userId}`);
+    console.log('User scores received:', response.data);
     return response.data;
   },
   
   addScore: async (gameId, points) => {
+    console.log(`Adding score for game ${gameId}: ${points} points`);
     const response = await api.post('/scores', { gameId, points });
+    console.log('Score added response:', response.data);
     return response.data;
   }
 };

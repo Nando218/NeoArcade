@@ -9,12 +9,17 @@ import { toast } from "sonner";
 export function TicTacToeGame() {
   const [board, setBoard] = useState(Array(9).fill(null));
   const [isPlayerTurn, setIsPlayerTurn] = useState(true);
-  const [gameStatus, setGameStatus] = useState("waiting"); // waiting, playing, ended
+  const [gameStatus, setGameStatus] = useState("playing"); // Changed initial state to "playing" instead of "waiting"
   const [winner, setWinner] = useState(null); // null, 'player', 'ai', 'draw'
   const [difficulty, setDifficulty] = useState("normal"); // easy, normal, hard
   const isMobile = useIsMobile();
   const { addScore } = useScores();
   const { isAuthenticated } = useAuth();
+
+  // Initialize the game automatically when component mounts
+  useEffect(() => {
+    startGame();
+  }, []);
 
   // Start the game
   const startGame = () => {
@@ -32,10 +37,7 @@ export function TicTacToeGame() {
 
   // Reset the game
   const resetGame = () => {
-    setBoard(Array(9).fill(null));
-    setIsPlayerTurn(true);
-    setGameStatus("waiting");
-    setWinner(null);
+    startGame();
   };
 
   // Player makes a move
@@ -249,14 +251,6 @@ export function TicTacToeGame() {
     <div className="flex flex-col items-center justify-center w-full max-w-lg px-4">
       {/* Game status */}
       <div className="w-full text-center mb-4">
-        {gameStatus === "waiting" && (
-          <div className="space-y-4">
-            <ArcadeButton variant="cyan" onClick={startGame}>
-              START
-            </ArcadeButton>
-          </div>
-        )}
-
         {gameStatus === "playing" && (
           <div className="mb-4">
             {isPlayerTurn ? "TU TURNO" : "TURNO DEL CONTRINCANTE..."}
@@ -290,14 +284,12 @@ export function TicTacToeGame() {
         )}
       </div>
 
-      {/* Game board - only shown when game is in playing or ended state */}
-      {(gameStatus === "playing" || gameStatus === "ended") && (
-        <div className="grid grid-cols-3 gap-2 mx-auto">
-          {board.map((_, index) => (
-            <div key={index}>{renderCell(index)}</div>
-          ))}
-        </div>
-      )}
+      {/* Game board */}
+      <div className="grid grid-cols-3 gap-2 mx-auto">
+        {board.map((_, index) => (
+          <div key={index}>{renderCell(index)}</div>
+        ))}
+      </div>
 
       {/* Centered restart button when game is ended */}
       {gameStatus === "ended" && (

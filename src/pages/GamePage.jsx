@@ -48,15 +48,10 @@ export default function GamePage() {
       default:
         return (
           <div className="text-center py-12">
-            <NeonText color="yellow" className="text-2xl mb-4">
+            <span className="text-2xl mb-4 text-yellow-400">
               EN DESARROLLO
-            </NeonText>
-            <p className="text-gray-300 font-pixel mb-6">
-              Este juego está en desarrollo y estará disponible próximamente.
-            </p>
-            <ArcadeButton onClick={() => navigate('/')}>
-              VOLVER AL INICIO
-            </ArcadeButton>
+            </span>
+           
           </div>
         );
     }
