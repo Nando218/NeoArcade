@@ -4,7 +4,7 @@ const { verifyToken, isAdmin } = require('../middleware/auth.middleware');
 
 const router = express.Router();
 
-// Get all games
+// Obtener todos los juegos
 router.get('/', async (req, res) => {
   try {
     const connection = await pool.getConnection();
@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Get game by ID
+// Obtener juego por ID
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -47,7 +47,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Add a new game (admin only)
+// Añadir un juego nuevo (admin only)
 router.post('/', verifyToken, isAdmin, async (req, res) => {
   try {
     const { name, description, image_url } = req.body;
@@ -58,7 +58,7 @@ router.post('/', verifyToken, isAdmin, async (req, res) => {
     
     const connection = await pool.getConnection();
     
-    // Check if the game name already exists
+    // Verificar si el nombre del juego ya existe
     const [existingGames] = await connection.query(
       'SELECT name FROM games WHERE name = ?',
       [name]
@@ -69,7 +69,7 @@ router.post('/', verifyToken, isAdmin, async (req, res) => {
       return res.status(409).json({ message: 'Game with this name already exists' });
     }
     
-    // Add the game
+    // Añadir el juego
     const [result] = await connection.query(
       'INSERT INTO games (name, description, image_url) VALUES (?, ?, ?)',
       [name, description || null, image_url || null]
@@ -92,7 +92,7 @@ router.post('/', verifyToken, isAdmin, async (req, res) => {
   }
 });
 
-// Update a game (admin only)
+// Actualizar un juego (admin only)
 router.put('/:id', verifyToken, isAdmin, async (req, res) => {
   try {
     const { id } = req.params;
@@ -104,7 +104,7 @@ router.put('/:id', verifyToken, isAdmin, async (req, res) => {
     
     const connection = await pool.getConnection();
     
-    // Check if the game exists
+    // Comprobar si el juego existe
     const [existingGames] = await connection.query(
       'SELECT id FROM games WHERE id = ?',
       [id]
@@ -115,7 +115,7 @@ router.put('/:id', verifyToken, isAdmin, async (req, res) => {
       return res.status(404).json({ message: 'Game not found' });
     }
     
-    // Update the game
+    // Actualizar el juego
     await connection.query(
       'UPDATE games SET name = ?, description = ?, image_url = ? WHERE id = ?',
       [name, description || null, image_url || null, id]
@@ -138,14 +138,14 @@ router.put('/:id', verifyToken, isAdmin, async (req, res) => {
   }
 });
 
-// Delete a game (admin only)
+// Borrar un juego (admin only)
 router.delete('/:id', verifyToken, isAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     
     const connection = await pool.getConnection();
     
-    // Check if the game exists
+    // Comprobar si el juego existe
     const [existingGames] = await connection.query(
       'SELECT id FROM games WHERE id = ?',
       [id]
@@ -156,7 +156,7 @@ router.delete('/:id', verifyToken, isAdmin, async (req, res) => {
       return res.status(404).json({ message: 'Game not found' });
     }
     
-    // Delete the game (scores will be deleted by CASCADE constraint)
+    // Eliminar el juego (las puntuaciones se eliminan también)
     await connection.query(
       'DELETE FROM games WHERE id = ?',
       [id]

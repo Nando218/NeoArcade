@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:8080'], // Agrega tu frontend si lo despliegas
+  origin: ['http://localhost:5173', 'http://localhost:8080'], // Agrega el frontend cuando lo despliegues*************************************
   credentials: true
 }));
 app.use(express.json());
@@ -44,11 +44,11 @@ async function startServer() {
     await initDb();
 
     app.listen(PORT, () => {
-      console.log(`🚀 Servidor escuchando en el puerto ${PORT}`);
+      console.log(`🚀 Servidor funcionando en el puerto ${PORT}`);
     });
   } catch (error) {
     console.error('❌ Error al iniciar el servidor:', error);
-    process.exit(1); // Salir si hay error crítico
+    process.exit(1); 
   }
 }
 

@@ -1,21 +1,21 @@
 const jwt = require('jsonwebtoken');
 
 const verifyToken = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1];  // Obtenemos el token del encabezado
+  const token = req.headers.authorization?.split(' ')[1];  // Con esto obtengo el token del encabezado
   
   if (!token) {
     return res.status(401).json({ message: 'No token provided' });
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);  // Verificamos el token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);  // Con esto verifico el token
     
-    // Asignamos el userId y el userRole al objeto req
+    // Asigno el userId y el userRole al objeto req
     req.userId = decoded.id;
     req.userRole = decoded.role;
     
     // Log para verificar si el userId está correctamente asignado
-    console.log("userId desde el token:", req.userId);  // Aquí verificamos el userId
+    console.log("userId desde el token:", req.userId);  
 
     next();  // Llamamos al siguiente middleware o ruta
   } catch (error) {

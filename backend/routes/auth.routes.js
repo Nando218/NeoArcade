@@ -6,7 +6,7 @@ const { verifyToken, isAdmin } = require('../middleware/auth.middleware');
 
 const router = express.Router();
 
-// Register a new user
+// Registro de nuevo usuario
 router.post('/register', async (req, res) => {
   try {
     const { username, email, password } = req.body;
@@ -32,7 +32,7 @@ router.post('/register', async (req, res) => {
       return res.status(409).json({ message: 'Username already exists' });
     }
     
-    // Hash de la contraseña
+    // Hasheo de la contraseña
     const hashedPassword = await bcrypt.hash(password, 10);
     
     // Crear nuevo usuario
@@ -120,7 +120,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Get current user profile
+// Obtener el perfil del usuario actual
 router.get('/me', verifyToken, async (req, res) => {
   try {
     const client = await pool.connect();
@@ -145,7 +145,7 @@ router.get('/me', verifyToken, async (req, res) => {
 
 // ADMIN ROUTES
 
-// Get all users (admin only)
+// Obtener todos los usuarios (Solo admin)
 router.get('/users', verifyToken, isAdmin, async (req, res) => {
   try {
     const client = await pool.connect();
@@ -156,7 +156,7 @@ router.get('/users', verifyToken, isAdmin, async (req, res) => {
     
     client.release();
     
-    // Remove sensitive information
+    // Eliminar información sensible
     const safeUsers = users.rows.map(user => {
       const { password, ...userWithoutPassword } = user;
       return userWithoutPassword;
@@ -169,12 +169,12 @@ router.get('/users', verifyToken, isAdmin, async (req, res) => {
   }
 });
 
-// Delete user (admin only)
+// Eliminar usuario (solo admin)
 router.delete('/users/:id', verifyToken, isAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     
-    // Don't allow admins to delete themselves
+    // No permite a los administradores eliminar su propia cuenta
     if (parseInt(id) === req.userId) {
       return res.status(400).json({ message: 'Cannot delete your own account' });
     }
@@ -191,7 +191,7 @@ router.delete('/users/:id', verifyToken, isAdmin, async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
     
-    // Delete user
+    // Eliminar usuario
     await client.query(
       'DELETE FROM users WHERE id = $1',
       [id]
@@ -206,7 +206,7 @@ router.delete('/users/:id', verifyToken, isAdmin, async (req, res) => {
   }
 });
 
-// Update user role (admin only)
+// Actualizar rol de usuario (solo admin) 
 router.patch('/users/:id/role', verifyToken, isAdmin, async (req, res) => {
   try {
     const { id } = req.params;
@@ -216,7 +216,7 @@ router.patch('/users/:id/role', verifyToken, isAdmin, async (req, res) => {
       return res.status(400).json({ message: 'Invalid role' });
     }
     
-    // Don't allow admins to change their own role
+    // No permite a los admins cambiar su propio rol
     if (parseInt(id) === req.userId) {
       return res.status(400).json({ message: 'Cannot change your own role' });
     }
@@ -233,7 +233,7 @@ router.patch('/users/:id/role', verifyToken, isAdmin, async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
     
-    // Update user role
+    // Actualizar rol de usuario
     await client.query(
       'UPDATE users SET role = $1 WHERE id = $2',
       [role, id]

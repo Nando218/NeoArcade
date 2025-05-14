@@ -9,11 +9,11 @@ dotenv.config();
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
-    rejectUnauthorized: false, // Necesario para conexiones SSL como Neon
+    rejectUnauthorized: false, 
   },
 });
 
-// Test de conexión y logging mejorado
+// Test de conexión y logging 
 async function testConnection() {
   try {
     console.log('Attempting to connect to PostgreSQL database with Neon...');

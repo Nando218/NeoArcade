@@ -18,7 +18,6 @@ export function GameCard({ game }) {
     strategy: 'purple',
     classic: 'green',
   };
-
  
 
   return (
@@ -29,8 +28,8 @@ export function GameCard({ game }) {
             src={game.id === 'tetris' 
               ? "https://res.cloudinary.com/dgzgzx9ov/image/upload/v1744797913/tetris_kvp48x.png"
               : game.id === 'tictactoe'
-              ? "https://res.cloudinary.com/dgzgzx9ov/image/upload/v1744799401/tictactoe_moa0pm.png"
-              : "https://res.cloudinary.com/dgzgzx9ov/image/upload/v1746722130/ChatGPT_Image_8_may_2025_18_31_36_axahjp.png"}
+              ? "https://res.cloudinary.com/dgzgzx9ov/image/upload/v1747241592/tictactoe_cjo4va.png"
+              : "https://res.cloudinary.com/dgzgzx9ov/image/upload/v1747241809/snake_kr5xh9.png"}
             alt={game.name}
             className="w-full h-full object-cover"
           />
@@ -62,3 +61,4 @@ export function GameCard({ game }) {
     </div>
   );
 }
+

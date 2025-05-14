@@ -5,7 +5,7 @@ const { verifyToken } = require('../middleware/auth.middleware');
 
 const router = express.Router();
 
-// Get all scores
+// Obtener todas las puntuaciones
 router.get('/', async (req, res) => {
   try {
     const result = await pool.query(`
@@ -40,7 +40,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Get scores by game
+// obtener puntuaciones de un juego
 router.get('/game/:gameId', async (req, res) => {
   try {
     const { gameId } = req.params;
@@ -80,7 +80,7 @@ router.get('/game/:gameId', async (req, res) => {
   }
 });
 
-// Get user scores
+// Obtener puntuaciones de un usuario
 router.get('/user/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
@@ -118,7 +118,7 @@ router.get('/user/:userId', async (req, res) => {
   }
 });
 
-// Add a new score
+// añadir puntuaciones
 router.post('/', verifyToken, async (req, res) => {
   try {
     console.log('Score data received:', req.body);
@@ -130,27 +130,27 @@ router.post('/', verifyToken, async (req, res) => {
       return res.status(400).json({ message: 'Game ID and points are required' });
     }
 
-    // Check if the game exists
+    // Comprobar si el juego existe
     const gameResult = await pool.query('SELECT id FROM games WHERE id = $1', [gameId]);
     
     if (gameResult.rows.length === 0) {
       return res.status(404).json({ message: 'Game not found' });
     }
     
-    // Ensure that the user is valid
+    // Asegurarse de que el usuario exista
     const userResult = await pool.query('SELECT id FROM users WHERE id = $1', [req.userId]);
     
     if (userResult.rows.length === 0) {
       return res.status(404).json({ message: 'User not found' });
     }
     
-    // Add the score to the database
+    // añadir puntuaciones
     const scoreResult = await pool.query(
       'INSERT INTO scores (user_id, game_id, points) VALUES ($1, $2, $3) RETURNING id',
       [req.userId, gameId, points]
     );
 
-    // Retrieve the newly created score entry
+    // Recuperar la entrada de puntuacion recien creada
     const newScoreResult = await pool.query(`
       SELECT 
         s.id, 
