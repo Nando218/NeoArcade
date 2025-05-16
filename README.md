@@ -17,6 +17,12 @@
 
 ## 🚀 How to Install the Project
 
+## Environment Variables
+This project uses environment variables to configure sensitive aspects such as the database connection and authentication. For security reasons, the .env file is not included in the repository.
+Create a .env file in the Backend folder and add the corresponding environment variables in the same format as shown in the .env.example file.
+
+## Instructions
+
 - Clone the repository: https://github.com/Nando218/RewindArcade.git
 - Open a terminal and navigate to the root folder.
 - Run: cd backend
