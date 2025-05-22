@@ -28,7 +28,8 @@ Create a .env file in the Backend folder and add the corresponding environment v
 - Run: cd backend
 - Run: npm install
 - Run: npm run dev
-- Open a new terminal and stay in the root folder.
+- Open a new terminal and navigate to the frontend folder.
+- Run: cd frontend
 - Run: npm install
 - Run: npm run dev
 - Click on: http://localhost:8080/
