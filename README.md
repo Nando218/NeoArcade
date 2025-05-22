@@ -35,8 +35,10 @@ Create a .env file in the Backend folder and add the corresponding environment v
 - Click on: http://localhost:8080/
 
 ## Testing
-
+- Backend - 40.5% coverage
 ![Backend - 40.5% coverage](https://github.com/user-attachments/assets/8e42d954-a5a8-488d-a7bf-60ccb3b9f23d)
+
+- Frontend - 37.3% coverage
 ![Frontend - 37.3% coverage](https://github.com/user-attachments/assets/478850b5-4131-4ea1-8f98-7008d57223d4)
 
 
