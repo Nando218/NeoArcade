@@ -14,7 +14,7 @@ const scoreRoutes = require('./routes/score.routes');
 const gameRoutes = require('./routes/game.routes');
 
 // Crear app
-const app = express();
+const app = require('./app');
 const PORT = process.env.PORT || 3001;
 
 // Middleware
