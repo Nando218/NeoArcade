@@ -34,6 +34,10 @@ Create a .env file in the Backend folder and add the corresponding environment v
 - Run: npm run dev
 - Click on: http://localhost:8080/
 
+## Testing
+
+
+
 
 ## 🚧 Coming soon:
 
