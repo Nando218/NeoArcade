@@ -44,7 +44,7 @@ export function LoginForm() {
       if (!success) {
         console.log("Login failed without specific error");
         setError(
-          "Email or password are incorrect. For predefined accounts: admin@arcade.com/admin123 or user@arcade.com/user123"
+          "Email or password are incorrect."
         );
       } else {
         console.log("Login completed successfully from the form");
@@ -62,7 +62,7 @@ export function LoginForm() {
 
       if (err.response?.status === 401) {
         setError(
-          "Email or password are incorrect. For predefined accounts: admin@arcade.com/admin123 or user@arcade.com/user123"
+          "Email or password are incorrect."
         );
       } else if (err.code === "ECONNABORTED" || !err.response) {
         const errorMessage =

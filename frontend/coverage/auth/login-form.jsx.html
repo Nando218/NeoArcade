@@ -403,7 +403,7 @@ export function LoginForm() {
 <span class="cstat-no" title="statement not covered" >      if (!success) {</span>
 <span class="cstat-no" title="statement not covered" >        console.log("Login failed without specific error");</span>
 <span class="cstat-no" title="statement not covered" >        setError(</span>
-<span class="cstat-no" title="statement not covered" >          "Email or password are incorrect. For predefined accounts: admin@arcade.com/admin123 or user@arcade.com/user123"</span>
+<span class="cstat-no" title="statement not covered" >          "Email or password are incorrect."</span>
 <span class="cstat-no" title="statement not covered" >        );</span>
 <span class="cstat-no" title="statement not covered" >      } else {</span>
 <span class="cstat-no" title="statement not covered" >        console.log("Login completed successfully from the form");</span>
@@ -421,7 +421,7 @@ export function LoginForm() {
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (err.response?.status === 401) {</span>
 <span class="cstat-no" title="statement not covered" >        setError(</span>
-<span class="cstat-no" title="statement not covered" >          "Email or password are incorrect. For predefined accounts: admin@arcade.com/admin123 or user@arcade.com/user123"</span>
+<span class="cstat-no" title="statement not covered" >          "Email or password are incorrect."</span>
 <span class="cstat-no" title="statement not covered" >        );</span>
 <span class="cstat-no" title="statement not covered" >      } else if (err.code === "ECONNABORTED" || !err.response) {</span>
 <span class="cstat-no" title="statement not covered" >        const errorMessage =</span>
