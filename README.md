@@ -41,6 +41,8 @@ Create a .env file in the Backend folder and add the corresponding environment v
 - Frontend - 37.3% coverage
 ![Frontend - 37.3% coverage](https://github.com/user-attachments/assets/478850b5-4131-4ea1-8f98-7008d57223d4)
 
+- More tests coming soon...
+
 
 
 
