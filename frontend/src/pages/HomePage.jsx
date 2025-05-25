@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Navbar } from '@/components/layout/navbar';
 import { Footer } from '@/components/layout/footer';
@@ -29,7 +28,11 @@ export default function HomePage() {
         <section className="mb-16">
           <div className="flex flex-col items-center text-center mb-10">
             <div className="mb-4 flex items-center justify-center">
-              <img src="https://res.cloudinary.com/dgzgzx9ov/image/upload/v1745514711/LogoPerson_s9pmbg.png" alt="NeoArcade Logo" className="h-72 mb-4 object-contain" />
+              <img
+                src="https://res.cloudinary.com/dgzgzx9ov/image/upload/v1745514711/LogoPerson_s9pmbg.png"
+                alt="NeoArcade Logo"
+                className="h-72 mb-4 object-contain animate-fade-in-up"
+              />
             </div>
             
             <p className="max-w-2xl text-lg text-gray-300 font-pixel">

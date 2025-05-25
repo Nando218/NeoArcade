@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 
 import { CyberButton } from '@/components/ui/cyber-button';
@@ -21,13 +20,24 @@ export function GameCard({ game }) {
  
 
   return (
-    <div className="group flex flex-col h-full bg-arcade-dark border-2 border-arcade-neon-blue/30 hover:border-arcade-neon-blue rounded-lg overflow-hidden transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,255,255,0.5)]">
+    <div className="group flex flex-col h-full bg-arcade-dark border-2 border-arcade-neon-blue/30 hover:border-arcade-neon-blue rounded-lg overflow-hidden transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,255,255,0.5)] animate-fade-in-up">
       <div className={`aspect-video ${['tetris', 'tictactoe', 'snake'].includes(game.id) ? '' : bgColors[game.category]} relative overflow-hidden`}>
-        {['tetris', 'tictactoe', 'snake'].includes(game.id) ? (
+        {game.id === 'tetris' ? (
+          <>
+            <img 
+              src={"https://res.cloudinary.com/dgzgzx9ov/image/upload/v1744797913/tetris_kvp48x.png"}
+              alt={game.name}
+              className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0 absolute inset-0"
+            />
+            <img
+              src="https://i.gifer.com/1DDX.gif"
+              alt="Tetris GIF"
+              className="w-full h-full object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute inset-0"
+            />
+          </>
+        ) : ['tictactoe', 'snake'].includes(game.id) ? (
           <img 
-            src={game.id === 'tetris' 
-              ? "https://res.cloudinary.com/dgzgzx9ov/image/upload/v1744797913/tetris_kvp48x.png"
-              : game.id === 'tictactoe'
+            src={game.id === 'tictactoe'
               ? "https://res.cloudinary.com/dgzgzx9ov/image/upload/v1747241592/tictactoe_cjo4va.png"
               : "https://res.cloudinary.com/dgzgzx9ov/image/upload/v1747241809/snake_kr5xh9.png"}
             alt={game.name}

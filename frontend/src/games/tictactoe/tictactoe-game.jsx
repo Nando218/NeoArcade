@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import { ArcadeButton } from "@/components/ui/arcade-button";
+import { Audio } from "../audio";
 
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useScores } from "@/lib/scores";
 import { useAuth } from "@/lib/auth";
 import { toast } from "sonner";
+
+const audio = new Audio();
 
 export function TicTacToeGame() {
   const [board, setBoard] = useState(Array(9).fill(null));
@@ -33,6 +36,7 @@ export function TicTacToeGame() {
     const randomDifficulty =
       difficulties[Math.floor(Math.random() * difficulties.length)];
     setDifficulty(randomDifficulty);
+    // audio.playStart(); // Quitar sonido al iniciar
   };
 
   // Reset the game
@@ -49,6 +53,11 @@ export function TicTacToeGame() {
     newBoard[index] = "X";
     setBoard(newBoard);
     setIsPlayerTurn(false);
+
+    // Solo reproducir sonido si el movimiento es dentro del juego, no al iniciar desde la card
+    if (gameStatus === "playing") {
+      audio.playMove();
+    }
 
     // Check if game is over after player's move
     const result = checkGameStatus(newBoard);
@@ -114,8 +123,10 @@ export function TicTacToeGame() {
       } else {
         toast.success("Victory!");
       }
+      audio.playLineClear(); // Play win sound
     } else if (result === "ai") {
       toast.error("You lose. Try again.");
+      audio.playGameOver(); // Play lose sound
     } else {
       toast.info("Draw!");
     }

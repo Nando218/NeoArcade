@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { useInterval } from './useInterval';
 import { useAuth } from "@/lib/auth";
@@ -7,6 +6,7 @@ import { ArcadeButton } from "@/components/ui/arcade-button";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { RefreshCw, ArrowLeft, ArrowRight, ArrowDown, ArrowUp } from "lucide-react";
+import { Audio } from '../audio';
 
 const CANVAS_SIZE = [400, 400];
 const SNAKE_START = [
@@ -22,6 +22,8 @@ const DIRECTIONS = {
   37: [-1, 0], // left
   39: [1, 0] // right
 };
+
+const audio = new Audio();
 
 export function SnakeGame() {
   const canvasRef = useRef(null);
@@ -75,11 +77,13 @@ export function SnakeGame() {
       });
       newApple = createApple();
       setApple(newApple);
+      audio.playLineClear(); // Play eat sound
     } else {
       snakeCopy.pop();
     }
 
     setSnake(snakeCopy);
+    // audio.playMove(); // Play move sound (eliminado según requerimiento)
   };
 
   // Check if collision with walls
@@ -127,6 +131,7 @@ export function SnakeGame() {
     setScore(0);
     setGameOver(false);
     setGameStarted(true);
+    audio.playStart(); // Play start sound
   };
 
   // Handle game over
@@ -134,6 +139,7 @@ export function SnakeGame() {
     setSpeed(null);
     setGameOver(true);
     setGameStarted(false);
+    audio.playGameOver(); // Play game over sound
 
     if (isAuthenticated && score > 0) {
       try {

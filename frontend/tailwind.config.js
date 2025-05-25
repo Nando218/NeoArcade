@@ -116,6 +116,10 @@ export default {
 					'0%': { fill: 'white' },
 					'50%': { fill: '#fbc638' },
 					'100%': { fill: 'white' }
+				},
+				'fade-in-up': {
+					'0%': { opacity: '0', transform: 'translateY(40px)' },
+					'100%': { opacity: '1', transform: 'translateY(0)' },
 				}
 			},
 			animation: {
@@ -126,6 +130,7 @@ export default {
 				'arrow-color-1': 'arrow-color 1s infinite 0.6s',
 				'arrow-color-2': 'arrow-color 1s infinite 0.4s',
 				'arrow-color-3': 'arrow-color 1s infinite 0.2s',
+				'fade-in-up': 'fade-in-up 1.6s cubic-bezier(0.22, 1, 0.36, 1) both',
 			},
 			fontFamily: {
 				'arcade': ['Press Start 2P', 'cursive'],
