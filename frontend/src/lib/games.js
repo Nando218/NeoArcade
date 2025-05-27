@@ -1,4 +1,3 @@
-
 // Datos de juegos disponibles
 export const GAMES = [
   {
@@ -32,7 +31,7 @@ export const GAMES = [
     id: 'pong',
     name: 'Pong',
     description: 'The first successful video game in history. Don\'t let the ball pass your paddle.',
-    imageUrl: '/images/pong.png',
+    imageUrl: 'https://res.cloudinary.com/dgzgzx9ov/image/upload/v1748268896/pong_tskcli.png',
     path: '/games/pong',
     difficulty: 'easy',
     category: 'classic'

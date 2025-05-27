@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 
 // Create axios instance with improved error handling
@@ -119,6 +118,11 @@ export const scoreAPI = {
     console.log(`Adding score for game ${gameId}: ${points} points`);
     const response = await api.post('/scores', { gameId, points });
     console.log('Score added response:', response.data);
+    return response.data;
+  },
+  
+  deleteScore: async (scoreId) => {
+    const response = await api.delete(`/scores/${scoreId}`);
     return response.data;
   }
 };

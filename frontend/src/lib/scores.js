@@ -1,4 +1,3 @@
-
 import { create } from 'zustand';
 import { scoreAPI } from './api';
 import { toast } from "@/hooks/use-toast";
@@ -28,10 +27,17 @@ export const useScores = create((set, get) => ({
       
       const normalizedScore = normalizeScore(response.score);
       
-      set((state) => ({
-        scores: [normalizedScore, ...state.scores],
-        isLoading: false
-      }));
+      set((state) => {
+        // Si ya existe una puntuación para este usuario y juego, reemplazarla
+        const filtered = state.scores.filter(
+          s => !(s.userId === normalizedScore.userId && s.gameId === normalizedScore.gameId)
+        );
+        
+        return {
+          scores: [normalizedScore, ...filtered],
+          isLoading: false
+        };
+      });
       
       toast({
         title: "¡Puntuación guardada!",
@@ -151,6 +157,53 @@ export const useScores = create((set, get) => ({
         variant: "destructive",
       });
       
+      return [];
+    }
+  },
+  
+  deleteScore: async (scoreId) => {
+    set({ isLoading: true, error: null });
+    try {
+      await scoreAPI.deleteScore(scoreId);
+      set((state) => ({
+        scores: state.scores.filter((s) => s.id !== scoreId),
+        isLoading: false
+      }));
+      toast({
+        title: "Puntuación eliminada",
+        description: `La puntuación ha sido eliminada correctamente.`,
+      });
+      return true;
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || error.message || 'Error al eliminar la puntuación';
+      set({ isLoading: false, error: errorMessage });
+      toast({
+        title: "Error al eliminar puntuación",
+        description: errorMessage,
+        variant: "destructive",
+      });
+      return false;
+    }
+  },
+  
+  fetchAllScores: async () => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await scoreAPI.getAllScores();
+      if (!response.scores || !Array.isArray(response.scores)) {
+        throw new Error('Invalid response format: scores array is missing');
+      }
+      const normalizedScores = response.scores.map(normalizeScore);
+      set({ scores: normalizedScores, isLoading: false });
+      return normalizedScores;
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || error.message || 'Error al cargar todas las puntuaciones';
+      set({ isLoading: false, error: errorMessage });
+      toast({
+        title: "Error de carga",
+        description: errorMessage,
+        variant: "destructive",
+      });
       return [];
     }
   },

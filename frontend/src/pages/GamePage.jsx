@@ -7,16 +7,19 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { TetrisGame } from '@/games/tetris/tetris-game';
 import { TicTacToeGame } from '@/games/tictactoe/tictactoe-game';
 import { SnakeGame } from '@/games/snake/snake-game';
+import { PongGame } from '@/games/pong/pong-game';
 import { ArcadeButton } from '@/components/ui/arcade-button';
 import { ArrowLeft } from 'lucide-react';
 import { useScores } from '@/lib/scores';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useAuth } from '@/lib/auth';
 
 export default function GamePage() {
   const { gameId } = useParams();
   const navigate = useNavigate();
   const game = gameId ? getGameById(gameId) : undefined;
-  const { fetchScoresByGame, getTopScoresByGame } = useScores();
+  const { user } = useAuth();
+  const { fetchScoresByGame, getTopScoresByGame, deleteScore } = useScores();
   const [topScores, setTopScores] = useState([]);
   const isMobile = useIsMobile();
   
@@ -45,6 +48,8 @@ export default function GamePage() {
         return <TicTacToeGame />;
       case 'snake':
         return <SnakeGame />;
+      case 'pong':
+        return <PongGame />;
       default:
         return (
           <div className="text-center py-12">
@@ -55,6 +60,16 @@ export default function GamePage() {
           </div>
         );
     }
+  };
+
+  // Handler para borrar puntuación
+  const handleDeleteScore = async (scoreId) => {
+    if (!window.confirm('¿Seguro que quieres borrar esta puntuación?')) return;
+    await deleteScore(scoreId);
+    // Refrescar top scores
+    fetchScoresByGame(game.id, 5).then(() => {
+      setTopScores(getTopScoresByGame(game.id, 5));
+    });
   };
   
   return (
@@ -98,6 +113,15 @@ export default function GamePage() {
                               <span className="text-white">{score.username}</span>
                             </div>
                             <span className="text-arcade-neon-green">{score.points.toLocaleString()}</span>
+                            {user?.role === 'admin' && (
+                              <button
+                                className="ml-2 text-red-400 hover:text-red-600 font-bold"
+                                onClick={() => handleDeleteScore(score.id)}
+                                title="Borrar puntuación"
+                              >
+                                X
+                              </button>
+                            )}
                           </li>
                         ))}
                       </ol>

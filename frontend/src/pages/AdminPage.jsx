@@ -1,4 +1,3 @@
-
 import { Navbar } from '@/components/layout/navbar';
 import { Footer } from '@/components/layout/footer';
 import { NeonText } from '@/components/ui/neon-text';
@@ -14,7 +13,7 @@ import { authAPI } from '@/lib/api';
 export default function AdminPage() {
   const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const { scores, addScore } = useScores();
+  const { scores, addScore, deleteScore, isLoading: scoresLoading, error: scoresError, fetchAllScores } = useScores();
   const [selectedTab, setSelectedTab] = useState('users');
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -106,6 +105,30 @@ export default function AdminPage() {
     }
   };
   
+  // Handler para borrar puntuación en el panel de administración
+  const handleDeleteScore = async (score) => {
+    if (!window.confirm(`¿Seguro que quieres borrar la puntuación de ${score.username} en ${getGameName(score.gameId)}?`)) return;
+    setActionInProgress(true);
+    const ok = await deleteScore(score.id);
+    if (ok) {
+      setActionFeedback({
+        type: 'success',
+        message: `Puntuación de ${score.username} eliminada correctamente.`
+      });
+      // Refrescar todas las puntuaciones para admins
+      if (typeof fetchAllScores === 'function') {
+        await fetchAllScores();
+      }
+    } else {
+      setActionFeedback({
+        type: 'error',
+        message: `Error al eliminar la puntuación.`
+      });
+    }
+    setActionInProgress(false);
+    setTimeout(() => setActionFeedback({ type: '', message: '' }), 5000);
+  };
+  
   if (!user || user.role !== 'admin') return null;
   
   const formatDate = (dateString) => {
@@ -120,10 +143,6 @@ export default function AdminPage() {
   const getGameName = (gameId) => {
     const game = getGameById(gameId);
     return game ? game.name : gameId;
-  };
-  
-  const handleDeleteScore = (score) => {
-    alert(`Score of ${score.username} in ${getGameName(score.gameId)} deleted`);
   };
   
   return (
@@ -296,6 +315,16 @@ export default function AdminPage() {
           
           {selectedTab === 'scores' && (
             <div className="bg-arcade-dark border-2 border-arcade-neon-blue shadow-[0_0_15px_rgba(57,255,20,0.3)] rounded-lg p-6">
+              {/* Feedback message */}
+              {actionFeedback.message && (
+                <div className={`mb-4 p-3 rounded font-pixel text-sm ${
+                  actionFeedback.type === 'success' 
+                    ? 'bg-arcade-neon-blue/10 text-arcade-neon-blue border border-arcade-neon-blue/30' 
+                    : 'bg-red-500/10 text-red-400 border border-red-500/30'
+                }`}>
+                  {actionFeedback.message}
+                </div>
+              )}
               <div className="overflow-x-auto">
                 <table className="min-w-full">
                   <thead>
