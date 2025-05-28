@@ -5,6 +5,7 @@ import { ArcadeButton } from "@/components/ui/arcade-button";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { toast } from "sonner";
 import { Audio } from "../audio";
+import GameOverGlitchText from "../tetris/GameOverGlitchText";
 
 // Parámetros originales del repositorio react-pong
 const WIDTH = 600;
@@ -275,29 +276,13 @@ export function PongGame() {
       {/* Imagen de resultado (win/lose) */}
       {gameOver && (
         <>
-          <div className="z-20 mb-2 flex flex-col items-center">
+          <div className="fixed inset-0 z-50 flex flex-col items-center justify-center pointer-events-none">
             {playerScore >= WIN_SCORE ? (
-              <img
-                src="https://res.cloudinary.com/dgzgzx9ov/image/upload/v1746613949/2025-05-07-You-Win-_h3rqsh.gif"
-                alt="You Win"
-                className="mx-auto w-[320px] h-[200px] object-contain"
-              />
+              <GameOverGlitchText text="YOU WIN!" className="mb-6 text-green-400" />
             ) : (
-              <img
-                src="https://res.cloudinary.com/dgzgzx9ov/image/upload/v1746613958/2025-05-07-You-Lose-_d5ktwc.gif"
-                alt="You Lose"
-                className="mx-auto w-[320px] h-[200px] object-contain"
-              />
+              <GameOverGlitchText text="YOU LOSE!" className="mb-6 text-red-600" />
             )}
-          </div>
-          <div className="absolute left-0 top-0 w-full h-full flex items-center justify-center z-30 pointer-events-none">
-            <ArcadeButton
-              onClick={startGame}
-              className="w-40 pointer-events-auto"
-              variant="green"
-            >
-              Play Again
-            </ArcadeButton>
+            {/* Botón Play Again eliminado */}
           </div>
         </>
       )}

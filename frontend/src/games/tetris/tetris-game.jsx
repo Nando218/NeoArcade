@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useAuth } from "@/lib/auth";
 import { useScores } from "@/lib/scores";
@@ -17,6 +16,7 @@ import {
   ArrowUp,
   RotateCcw
 } from "lucide-react";
+import GameOverGlitchText from "./GameOverGlitchText";
 
 // TETROMINOS SHAPES
 const TETROMINOS = {
@@ -645,16 +645,12 @@ export function TetrisGame() {
 
             {/* Game Over overlay */}
             {gameOver && (
-              <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center p-4">
-                <img
-                  src="https://res.cloudinary.com/dgzgzx9ov/image/upload/v1746613097/game-over-game_rqfqzb.gif"
-                  alt="Game Over"
-                  className="w-full h-auto mb-4"
-                />
+              <div className="fixed inset-0 z-50 flex flex-col items-center justify-center pointer-events-none">
+                <GameOverGlitchText className="mb-6" />
                 <p className="text-white font-pixel mb-6">Score: {score}</p>
                 <ArcadeButton
                   onClick={startGame}
-                  className="bg-arcade-neon-blue hover:bg-arcade-neon-blue/80 text-black font-bold"
+                  className="bg-arcade-neon-blue hover:bg-arcade-neon-blue/80 text-black font-bold pointer-events-auto"
                 >
                   Play Again
                 </ArcadeButton>

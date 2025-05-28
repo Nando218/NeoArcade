@@ -7,13 +7,15 @@ import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { RefreshCw, ArrowLeft, ArrowRight, ArrowDown, ArrowUp } from "lucide-react";
 import { Audio } from '../audio';
+import GameOverGlitchText from "../tetris/GameOverGlitchText";
 
-const CANVAS_SIZE = [400, 400];
+// Cambiar el tamaño del canvas a más alargado (rectangular)
+const CANVAS_SIZE = [480, 320]; // Cambiado para hacer el campo más alargado
 const SNAKE_START = [
-  [8, 7],
-  [8, 8]
+  [12, 7], // Ajustado para el nuevo tamaño
+  [12, 8]
 ];
-const APPLE_START = [8, 3];
+const APPLE_START = [12, 3]; // Ajustado para el nuevo tamaño
 const SCALE = 20;
 const SPEED = 100;
 const DIRECTIONS = {
@@ -297,7 +299,7 @@ export function SnakeGame() {
       <div className={`flex ${isMobile ? "flex-col" : "flex-row"} items-start justify-center gap-6`}>
         <div className="flex flex-col items-center">
           {/* Score and high score panel */}
-          <div className="flex justify-between w-full max-w-[400px] mb-3">
+          <div className="flex justify-between w-full max-w-[480px] mb-3">
             <div className="text-center">
               <p className="text-sm font-pixel text-gray-300 mb-1">SCORE</p>
               <span className="text-xl">{score}</span>
@@ -309,26 +311,22 @@ export function SnakeGame() {
           </div>
 
           {/* Game area */}
-          <div className="relative bg-arcade-dark border-2 border-arcade-neon-green shadow-[0_0_8px_rgba(57,255,20,0.6)] rounded-md overflow-hidden">
+          <div className="relative bg-arcade-dark border-2 border-arcade-neon-green shadow-[0_0_8px_rgba(57,255,20,0.6)] rounded-md overflow-hidden w-full max-w-[480px] aspect-[3/2] mx-auto">
             <canvas
               ref={canvasRef}
               width={`${CANVAS_SIZE[0]}px`}
               height={`${CANVAS_SIZE[1]}px`}
-              className="block"
+              className="block w-full max-w-[480px] aspect-[3/2] h-auto"
             />
 
             {/* Game Over overlay */}
             {gameOver && (
-              <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center p-4">
-                <img
-                  src="https://res.cloudinary.com/dgzgzx9ov/image/upload/v1746613097/game-over-game_rqfqzb.gif"
-                  alt="Game Over"
-                  className="w-full h-auto mb-4"
-                />
+              <div className="fixed inset-0 z-50 flex flex-col items-center justify-center pointer-events-none">
+                <GameOverGlitchText text="GAME OVER" className="mb-6" />
                 <p className="text-white font-pixel mb-6">Score: {score}</p>
                 <ArcadeButton
                   onClick={startGame}
-                  className="bg-arcade-neon-green hover:bg-arcade-neon-green/80 text-black font-bold"
+                  className="bg-arcade-neon-green hover:bg-arcade-neon-green/80 text-black font-bold pointer-events-auto"
                 >
                   Play Again
                 </ArcadeButton>

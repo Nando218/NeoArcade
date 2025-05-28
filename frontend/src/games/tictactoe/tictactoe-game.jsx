@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { ArcadeButton } from "@/components/ui/arcade-button";
 import { Audio } from "../audio";
+import GameOverGlitchText from "../tetris/GameOverGlitchText";
 
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useScores } from "@/lib/scores";
@@ -260,46 +261,29 @@ export function TicTacToeGame() {
 
   return (
     <div className="flex flex-col items-center justify-center w-full max-w-lg px-4">
-      {/* Game status */}
-      <div className="w-full text-center mb-4">
-        {gameStatus === "playing" && (
-          <div className="mb-4">
-            {isPlayerTurn ? "TU TURNO" : "TURNO DEL CONTRINCANTE..."}
+      <div className="relative w-full flex justify-center items-center min-h-[320px]">
+        {/* Game Over/Draw Overlay */}
+        {gameStatus === "ended" && winner === "draw" && (
+          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center pointer-events-none">
+            <GameOverGlitchText text="DRAW!" className="mb-4" />
           </div>
         )}
-
-        {gameStatus === "ended" && (
-          <div className="mb-4">
-            {winner === "player" && (
-              <img
-                src="https://res.cloudinary.com/dgzgzx9ov/image/upload/v1746613949/2025-05-07-You-Win-_h3rqsh.gif"
-                alt="Victory!"
-                className="mb-2"
-              />
-            )}
-            {winner === "ai" && (
-              <img
-                src="https://res.cloudinary.com/dgzgzx9ov/image/upload/v1746613958/2025-05-07-You-Lose-_d5ktwc.gif"
-                alt="Defeat!"
-                className="mb-2"
-              />
-            )}
-            {winner === "draw" && (
-              <img
-                src="https://res.cloudinary.com/dgzgzx9ov/image/upload/v1746614162/2025-05-07-Draw-_efekz5.gif"
-                alt="Draw!"
-                className="mb-2"
-              />
-            )}
+        {gameStatus === "ended" && winner === "player" && (
+          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center pointer-events-none">
+            <GameOverGlitchText text="YOU WIN!" className="mb-4 text-green-400" />
           </div>
         )}
-      </div>
-
-      {/* Game board */}
-      <div className="grid grid-cols-3 gap-2 mx-auto">
-        {board.map((_, index) => (
-          <div key={index}>{renderCell(index)}</div>
-        ))}
+        {gameStatus === "ended" && winner === "ai" && (
+          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center pointer-events-none">
+            <GameOverGlitchText text="YOU LOSE!" className="mb-4 text-red-600" />
+          </div>
+        )}
+        {/* Game board */}
+        <div className="grid grid-cols-3 gap-2 mx-auto">
+          {board.map((_, index) => (
+            <div key={index}>{renderCell(index)}</div>
+          ))}
+        </div>
       </div>
 
       {/* Centered restart button when game is ended */}

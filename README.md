@@ -24,7 +24,7 @@ Create a .env file in the Backend folder and add the corresponding environment v
 ## Instructions
 
 - Clone the repository: https://github.com/Nando218/RewindArcade.git
-- Run: git switch dev
+- Open a terminal and navigate to the root folder.
 - Run: cd backend
 - Run: npm install
 - Run: npm run dev
@@ -36,17 +36,9 @@ Create a .env file in the Backend folder and add the corresponding environment v
 
 ## Testing
 - Backend - 40.5% coverage
- Execute test at backend folder:
-```
-  npm run test
-```
 ![Backend - 40.5% coverage](https://github.com/user-attachments/assets/8e42d954-a5a8-488d-a7bf-60ccb3b9f23d)
 
 - Frontend - 37.3% coverage
-Execute test at frontend folder:
-```
-  npx vitest run
-```
 ![Frontend - 37.3% coverage](https://github.com/user-attachments/assets/478850b5-4131-4ea1-8f98-7008d57223d4)
 
 - More tests coming soon...
