@@ -14,8 +14,8 @@ const PADDLE_WIDTH = 10;
 const PADDLE_HEIGHT = 60;
 const BALL_SIZE = 10;
 const PLAYER_SPEED = 14;
-const AI_SPEED = 4; // IA más lenta para menor dificultad
-const BALL_SPEED = 6;
+const AI_SPEED = 6.5; // IA más lenta para menor dificultad
+const BALL_SPEED = 7;
 const WIN_SCORE = 10;
 
 export function PongGame() {

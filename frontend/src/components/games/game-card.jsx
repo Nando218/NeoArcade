@@ -30,35 +30,63 @@ export function GameCard({ game }) {
               className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0 absolute inset-0"
             />
             <img
-              src="https://i.gifer.com/1DDX.gif"
+              src="https://res.cloudinary.com/dgzgzx9ov/image/upload/v1748512780/tetrisgif_rcjinp.gif"
               alt="Tetris GIF"
-              className="w-full h-full object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute inset-0"
+              className="h-[95%] w-full object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute inset-x-0 top-1/2 transform -translate-y-1/2"
             />
           </>
         ) : game.id === 'tictactoe' ? (
-          <img 
-            src={"https://res.cloudinary.com/dgzgzx9ov/image/upload/v1747241592/tictactoe_cjo4va.png"}
-            alt={game.name}
-            className="w-full h-full object-cover"
-          />
+          <>
+            <img 
+              src={"https://res.cloudinary.com/dgzgzx9ov/image/upload/v1747241592/tictactoe_cjo4va.png"}
+              alt={game.name}
+              className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0 absolute inset-0"
+            />
+            <img
+              src="https://res.cloudinary.com/dgzgzx9ov/image/upload/v1748514491/tictactoegif_oayxv8.gif"
+              alt="TicTacToe GIF"
+              className="w-full h-full object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute inset-0"
+            />
+          </>
         ) : game.id === 'snake' ? (
-          <img 
-            src={"https://res.cloudinary.com/dgzgzx9ov/image/upload/v1747241809/snake_kr5xh9.png"}
-            alt={game.name}
-            className="w-full h-full object-cover"
-          />
+          <>
+            <img 
+              src={"https://res.cloudinary.com/dgzgzx9ov/image/upload/v1747241809/snake_kr5xh9.png"}
+              alt={game.name}
+              className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0 absolute inset-0"
+            />
+            <img
+              src="https://res.cloudinary.com/dgzgzx9ov/image/upload/v1748515714/snakegif_mm2yzd.gif"
+              alt="Snake GIF"
+              className="w-full h-full object-contain bg-black transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute inset-0"
+            />
+          </>
         ) : game.id === 'pong' ? (
-          <img 
-            src={game.imageUrl}
-            alt={game.name}
-            className="w-full h-full object-cover"
-          />
+          <>
+            <img 
+              src={game.imageUrl}
+              alt={game.name}
+              className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0 absolute inset-0"
+            />
+            <img
+              src="https://res.cloudinary.com/dgzgzx9ov/image/upload/v1748516721/ponggif_t8uwzj.gif"
+              alt="Pong GIF"
+              className="w-full h-full object-contain bg-black transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute inset-0"
+            />
+          </>
         ) : game.id === 'connect4' ? (
-          <img 
-            src={game.imageUrl}
-            alt={game.name}
-            className="w-full h-full object-cover"
-          />
+          <>
+            <img 
+              src={game.imageUrl}
+              alt={game.name}
+              className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0 absolute inset-0"
+            />
+            <img
+              src="https://res.cloudinary.com/dgzgzx9ov/image/upload/v1748517155/conncect4gif_ea8cj6.gif"
+              alt="Connect4 GIF"
+              className="w-full h-full object-contain bg-black transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute inset-0"
+            />
+          </>
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
             <span className="text-2xl opacity-70 group-hover:opacity-90 transition-opacity duration-300">
