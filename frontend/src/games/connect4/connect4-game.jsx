@@ -160,7 +160,7 @@ export function Connect4Game() {
 
   return (
     <div className="flex flex-col items-center justify-center gap-2">
-      <div className="relative p-4 rounded-2xl shadow-2xl border border-purple-900 min-w-[540px] min-h-[520px] flex items-center justify-center bg-transparent">
+      <div className="relative p-4 rounded-2xl shadow-2xl border border-green-500 min-w-[540px] min-h-[520px] flex items-center justify-center bg-transparent">
         {/* Mensaje de victoria superpuesto */}
         {gameOver && winner === 1 && (
           <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
