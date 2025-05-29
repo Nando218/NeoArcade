@@ -53,6 +53,12 @@ export function GameCard({ game }) {
             alt={game.name}
             className="w-full h-full object-cover"
           />
+        ) : game.id === 'connect4' ? (
+          <img 
+            src={game.imageUrl}
+            alt={game.name}
+            className="w-full h-full object-cover"
+          />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
             <span className="text-2xl opacity-70 group-hover:opacity-90 transition-opacity duration-300">

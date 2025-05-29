@@ -8,6 +8,7 @@ import { TetrisGame } from '@/games/tetris/tetris-game';
 import { TicTacToeGame } from '@/games/tictactoe/tictactoe-game';
 import { SnakeGame } from '@/games/snake/snake-game';
 import { PongGame } from '@/games/pong/pong-game';
+import { Connect4Game } from '@/games/connect4/connect4-game';
 import { ArcadeButton } from '@/components/ui/arcade-button';
 import { ArrowLeft } from 'lucide-react';
 import { useScores } from '@/lib/scores';
@@ -50,13 +51,14 @@ export default function GamePage() {
         return <SnakeGame />;
       case 'pong':
         return <PongGame />;
+      case 'connect4':
+        return <Connect4Game />;
       default:
         return (
           <div className="text-center py-12">
             <span className="text-2xl mb-4 text-yellow-400">
               EN DESARROLLO
             </span>
-           
           </div>
         );
     }

@@ -37,13 +37,13 @@ export const GAMES = [
     category: 'classic'
   },
   {
-    id: 'pacman',
-    name: 'Pac-Man',
-    description: 'Eat all the dots while avoiding the ghosts in this iconic arcade game.',
-    imageUrl: '/images/pacman.png',
-    path: '/games/pacman',
+    id: 'connect4',
+    name: 'Connect 4',
+    description: 'Take turns dropping chips and connect four of the same color in a row.',
+    imageUrl: 'https://res.cloudinary.com/dgzgzx9ov/image/upload/v1748509649/connect4_vubsll.png',
+    path: '/games/connect4',
     difficulty: 'medium',
-    category: 'classic'
+    category: 'strategy'
   },
   {
     id: 'arkanoid',
@@ -55,13 +55,13 @@ export const GAMES = [
     category: 'action'
   },
   {
-    id: 'connect4',
-    name: 'Connect 4',
-    description: 'Take turns dropping chips and connect four of the same color in a row.',
-    imageUrl: '/images/connect4.png',
-    path: '/games/connect4',
+    id: 'pacman',
+    name: 'Pac-Man',
+    description: 'Eat all the dots while avoiding the ghosts in this iconic arcade game.',
+    imageUrl: '/images/pacman.png',
+    path: '/games/pacman',
     difficulty: 'medium',
-    category: 'strategy'
+    category: 'classic'
   }
 ];
 
