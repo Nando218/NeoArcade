@@ -4,6 +4,7 @@ import { useScores } from "@/lib/scores";
 import { useAuth } from "@/lib/auth";
 import { toast } from "sonner";
 import GameOverGlitchText from "../tetris/GameOverGlitchText";
+import { Audio } from "../audio";
 
 // Parámetros del tablero
 const ROWS = 6;
@@ -79,6 +80,8 @@ function checkWinner(board) {
   return null;
 }
 
+const audio = new Audio();
+
 export function Connect4Game() {
   const [board, setBoard] = useState(createEmptyBoard());
   const [currentPlayer, setCurrentPlayer] = useState(PLAYER);
@@ -92,6 +95,7 @@ export function Connect4Game() {
     setCurrentPlayer(PLAYER);
     setGameOver(false);
     setWinner(null);
+    audio.playStart(); // sonido de inicio
   };
 
   const handleColumnClick = (col) => {
@@ -102,6 +106,7 @@ export function Connect4Game() {
     const newBoard = board.map(rowArr => [...rowArr]);
     newBoard[row][col] = PLAYER;
     setBoard(newBoard);
+    audio.playMove(); // sonido de movimiento
     const result = checkWinner(newBoard);
     if (result) {
       endGame(result);
@@ -124,6 +129,7 @@ export function Connect4Game() {
     const newBoard = b.map(rowArr => [...rowArr]);
     newBoard[row][col] = AI;
     setBoard(newBoard);
+    audio.playMove(); // sonido de movimiento IA
     const result = checkWinner(newBoard);
     if (result) {
       endGame(result);
@@ -139,13 +145,16 @@ export function Connect4Game() {
       try {
         await addScore({ gameId: "connect4", points: 100 });
         toast.success("Victory! +100 points");
+        audio.playLineClear(); // sonido de victoria
       } catch {
         toast.error("Error saving score");
       }
     } else if (result === AI) {
       toast.error("You lost. Try again.");
+      audio.playGameOver(); // sonido de derrota
     } else if (result === "draw") {
       toast.info("Draw!");
+      audio.playPause(); // sonido de empate
     }
   };
 
