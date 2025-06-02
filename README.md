@@ -1,40 +1,62 @@
-# 🎮 REWIND ARCADE - MVP Version
+# 🎮 Rewind Arcade 
 
-**Minimum Viable Product of the Rewind Arcade**
+Rewind Arcade is a web platform that revives classic arcade games, allowing users to compete for high scores, manage profiles, and enjoy a retro experience with modern features.
 
-## ✅ Implemented Features
+## ✨ Project Description
 
-- 🎮 Three games developed: **Tetris**, **Tic-Tac-Toe**, and **Snake**
-- 🗄️ Database hosted on **Neon (PostgreSQL)**
+Rewind Arcade is a fullstack project offering a collection of classic games like Tetris, Snake, and Tic-Tac-Toe, with a user system featuring roles (admin and user), score management, and an admin panel. The backend is built with Node.js and Express, using a PostgreSQL database hosted on Neon. The frontend is developed with React and Vite, providing a modern and responsive interface.
+
+### Main Features
+- 🎮 Available games: **Tetris**, **Tic-Tac-Toe**, **Snake**, **Pong**, **Connect-4**
+- 🗄️ Database on **Neon (PostgreSQL)**
 - 👥 Role system: **admin** and **user**
 - 🛠️ Admin functionalities:
   - Delete users
   - Promote users to admin
   - Delete scores
-- 🏆 Scoring system
+- 🏆 Global scoring system
+- 🔒 JWT authentication and authorization
+- 📧 EmailJS integration for notifications
 
 ---
 
-## 🚀 How to Install the Project
+## 🚀 Installation & Getting Started
 
-## Environment Variables
-This project uses environment variables to configure sensitive aspects such as the database connection and authentication. For security reasons, the .env file is not included in the repository.
-Create a .env file in the Backend folder and add the corresponding environment variables in the same format as shown in the .env.example file.
+### 1. Clone the repository
 
-## Instructions
+```bash
+https://github.com/Nando218/RewindArcade.git
+```
 
-- Clone the repository: https://github.com/Nando218/RewindArcade.git
-- Open a terminal and navigate to the root folder.
-- Run: cd backend
-- Run: npm install
-- Run: npm run dev
-- Open a new terminal and navigate to the frontend folder.
-- Run: cd frontend
-- Run: npm install
-- Run: npm run dev
-- Click on: http://localhost:8080/
+### 2. Set up environment variables
 
-## Testing
+Create a `.env` file in the `backend` folder following the format of `.env.example` to configure the database and authentication.
+
+### 3. Install and run the Backend
+
+```bash
+cd backend
+npm install
+npm run dev
+```
+
+### 4. Install and run the Frontend
+
+Open a new terminal and run:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+### 5. Access the application
+
+Open your browser at: [http://localhost:8080/](http://localhost:8080/)
+
+---
+
+## 🧪 Testing
 - Backend - 40.5% coverage
 ![Backend - 40.5% coverage](https://github.com/user-attachments/assets/8e42d954-a5a8-488d-a7bf-60ccb3b9f23d)
 
@@ -43,16 +65,11 @@ Create a .env file in the Backend folder and add the corresponding environment v
 
 - More tests coming soon...
 
+---
 
+## 🚧 Coming Soon
 
-
-
-
-## 🚧 Coming soon:
-
-
-🕹️ New games: Pong, Pac-Man, Arkanoid, and Connect 4
+🕹️ New games:  Pac-Man, Arkanoid
 
 🎵 Music and sound effects
 
-✨ Animations and visual improvements
