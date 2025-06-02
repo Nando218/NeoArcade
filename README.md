@@ -1,5 +1,10 @@
 # 🎮 Rewind Arcade 
 
+<p style="text-align:center;">![LogoPerson 1](https://github.com/user-attachments/assets/0e53cfe5-121a-46b3-a853-556ee5cf1044)</p>
+
+
+
+
 Rewind Arcade is a web platform that revives classic arcade games, allowing users to compete for high scores, manage profiles, and enjoy a retro experience with modern features.
 
 ## ✨ Project Description
