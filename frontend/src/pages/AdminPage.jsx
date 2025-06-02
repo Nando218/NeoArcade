@@ -107,13 +107,13 @@ export default function AdminPage() {
   
   // Handler para borrar puntuación en el panel de administración
   const handleDeleteScore = async (score) => {
-    if (!window.confirm(`¿Seguro que quieres borrar la puntuación de ${score.username} en ${getGameName(score.gameId)}?`)) return;
+    if (!window.confirm(`Are you sure you want to delete ${score.username}'s score in ${getGameName(score.gameId)}?`)) return;
     setActionInProgress(true);
     const ok = await deleteScore(score.id);
     if (ok) {
       setActionFeedback({
         type: 'success',
-        message: `Puntuación de ${score.username} eliminada correctamente.`
+        message: `Score by ${score.username} deleted successfully.`
       });
       // Refrescar todas las puntuaciones para admins
       if (typeof fetchAllScores === 'function') {
@@ -122,7 +122,7 @@ export default function AdminPage() {
     } else {
       setActionFeedback({
         type: 'error',
-        message: `Error al eliminar la puntuación.`
+        message: `Error deleting score.`
       });
     }
     setActionInProgress(false);

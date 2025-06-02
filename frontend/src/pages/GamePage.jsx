@@ -66,7 +66,7 @@ export default function GamePage() {
 
   // Handler para borrar puntuación
   const handleDeleteScore = async (scoreId) => {
-    if (!window.confirm('¿Seguro que quieres borrar esta puntuación?')) return;
+    if (!window.confirm('Are you sure you want to delete this score?')) return;
     await deleteScore(scoreId);
     // Refrescar top scores
     fetchScoresByGame(game.id, 5).then(() => {

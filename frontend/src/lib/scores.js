@@ -40,15 +40,15 @@ export const useScores = create((set, get) => ({
       });
       
       toast({
-        title: "¡Puntuación guardada!",
-        description: `Se han registrado ${points} puntos en ${gameId}.`,
+        title: "Score saved!",
+        description: `You scored ${points} points in ${gameId}.`,
       });
       
       return true;
     } catch (error) {
       console.error('Failed to add score:', error);
       
-      const errorMessage = error.response?.data?.message || error.message || 'Error al guardar la puntuación';
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to save score';
       
       set({ 
         isLoading: false, 
@@ -56,7 +56,7 @@ export const useScores = create((set, get) => ({
       });
       
       toast({
-        title: "Error al guardar puntuación",
+        title: "Failed to save score",
         description: errorMessage,
         variant: "destructive",
       });
@@ -98,7 +98,7 @@ export const useScores = create((set, get) => ({
     } catch (error) {
       console.error('Failed to fetch game scores:', error);
       
-      const errorMessage = error.response?.data?.message || error.message || 'Error al cargar las puntuaciones';
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to save scores';
       
       set({ 
         isLoading: false, 
@@ -106,7 +106,7 @@ export const useScores = create((set, get) => ({
       });
       
       toast({
-        title: "Error de carga",
+        title: "Error loading scores",
         description: errorMessage,
         variant: "destructive",
       });
@@ -144,7 +144,7 @@ export const useScores = create((set, get) => ({
     } catch (error) {
       console.error('Failed to fetch user scores:', error);
       
-      const errorMessage = error.response?.data?.message || error.message || 'Error al cargar las puntuaciones del usuario';
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to load user scores';
       
       set({ 
         isLoading: false, 
@@ -152,7 +152,7 @@ export const useScores = create((set, get) => ({
       });
       
       toast({
-        title: "Error de carga",
+        title: "Loading Error",
         description: errorMessage,
         variant: "destructive",
       });
@@ -170,15 +170,15 @@ export const useScores = create((set, get) => ({
         isLoading: false
       }));
       toast({
-        title: "Puntuación eliminada",
-        description: `La puntuación ha sido eliminada correctamente.`,
+        title: "Score deleted",
+        description: `The score has been deleted successfully.`,
       });
       return true;
     } catch (error) {
-      const errorMessage = error.response?.data?.message || error.message || 'Error al eliminar la puntuación';
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to delete score';
       set({ isLoading: false, error: errorMessage });
       toast({
-        title: "Error al eliminar puntuación",
+        title: "Failed to delete score",
         description: errorMessage,
         variant: "destructive",
       });
@@ -197,10 +197,10 @@ export const useScores = create((set, get) => ({
       set({ scores: normalizedScores, isLoading: false });
       return normalizedScores;
     } catch (error) {
-      const errorMessage = error.response?.data?.message || error.message || 'Error al cargar todas las puntuaciones';
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to load all scores';
       set({ isLoading: false, error: errorMessage });
       toast({
-        title: "Error de carga",
+        title: "Loading Error",
         description: errorMessage,
         variant: "destructive",
       });
