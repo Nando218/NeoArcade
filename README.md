@@ -25,6 +25,18 @@ Rewind Arcade is a full-stack project offering a collection of classic games lik
 
 ## 📷 Screen captures
 
+![main](https://github.com/user-attachments/assets/e6e422a8-22a4-4702-b197-4fd1b5fd5fa3)
+
+![Tetris](https://github.com/user-attachments/assets/aa2f72ac-339c-4895-a036-97038878098b)
+
+![TicTacToe](https://github.com/user-attachments/assets/4094d578-2ee4-43a2-844d-ca03ca32e8a0)
+
+![Snake](https://github.com/user-attachments/assets/47dbc31b-ef8c-4674-b1ea-7ff1eea935ba)
+
+![Pong](https://github.com/user-attachments/assets/12a64450-64a4-4eea-814f-57ad8f50f1e7)
+
+![Connect-4](https://github.com/user-attachments/assets/274a5c6d-0294-46e5-b208-128d4fd912c6)
+
 
 
 ## 🚀 Installation & Getting Started
@@ -83,6 +95,8 @@ Open your browser at: [http://localhost:8080/](http://localhost:8080/)
 ## 🚧 Coming Soon
 
 🕹️ New games:  Pac-Man, Arkanoid
+
+👥 2 players mode
 
 🎵 Music and sound effects
 
