@@ -7,7 +7,7 @@ Rewind Arcade is a web platform that revives classic arcade games, allowing user
 
 ## ✨ Project Description
 
-Rewind Arcade is a fullstack project offering a collection of classic games like Tetris, Snake, and Tic-Tac-Toe, with a user system featuring roles (admin and user), score management, and an admin panel. The backend is built with Node.js and Express, using a PostgreSQL database hosted on Neon. The frontend is developed with React and Vite, providing a modern and responsive interface.
+Rewind Arcade is a full-stack project offering a collection of classic games like Tetris, Snake, or Tic-Tac-Toe, among others, with a user system featuring roles (admin and user), score management, and an admin panel. The backend is built with **Node.js** and **Express**, using a **PostgreSQL** database hosted on Neon. The frontend is developed with **React** and **Vite**, providing a modern and responsive interface.
 
 ### Main Features
 - 🎮 Available games: **Tetris**, **Tic-Tac-Toe**, **Snake**, **Pong**, **Connect-4**
@@ -22,6 +22,10 @@ Rewind Arcade is a fullstack project offering a collection of classic games like
 - 📧 EmailJS integration for notifications
 
 ---
+
+## 📷 Screen captures
+
+
 
 ## 🚀 Installation & Getting Started
 
@@ -51,6 +55,12 @@ Open a new terminal and run:
 cd frontend
 npm install
 npm run dev
+```
+
+## ⚠️ In some cases, it is necessary to install the dependencies of EmailJS.
+
+```bash
+npm install @emailjs/browser
 ```
 
 ### 5. Access the application
