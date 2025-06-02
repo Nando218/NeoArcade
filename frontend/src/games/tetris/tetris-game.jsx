@@ -501,8 +501,8 @@ export function TetrisGame() {
         
         // Notify about level up
         toast({
-          title: `¡Nivel ${newLevel}!`,
-          description: "La velocidad ha aumentado.",
+          title: `Level ${newLevel}!`,
+          description: "Speed has increased.",
           variant: "success",
         });
       }

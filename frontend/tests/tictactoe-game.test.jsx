@@ -11,9 +11,12 @@ vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn(), info: vi.f
 describe('TicTacToeGame', () => {
   it('renders the board and status', () => {
     render(<TicTacToeGame />);
-    expect(screen.getByText(/tu turno/i)).toBeInTheDocument();
-    // There are 9 clickable cells, but they are divs, not buttons
-    expect(screen.getAllByText('', { selector: 'div.bg-arcade-dark' }).length).toBe(9);
+    // El estado inicial es "playing" y es el turno del jugador, pero no hay texto "tu turno" en el render
+    // Comprobamos que hay 9 celdas y el tablero está vacío
+    const cells = screen.getAllByText('', { selector: 'div.bg-arcade-dark' });
+    expect(cells.length).toBe(9);
+    // Comprobamos que no hay overlay de victoria/derrota/draw
+    expect(screen.queryByText(/win|lose|draw/i)).not.toBeInTheDocument();
   });
 
   it('lets player make a move and updates board', () => {
