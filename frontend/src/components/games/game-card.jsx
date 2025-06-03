@@ -99,7 +99,7 @@ export function GameCard({ game }) {
       <div className="flex flex-col justify-between p-4 flex-grow">
         <div>
           <h3 className="font-pixel text-2xl mb-1 text-white">
-            <GameOverGlitchText text={game.name} className="text-2xl md:text-3xl" />
+            <GameOverGlitchText text={game.name} className="text-lg md:text-xl" />
           </h3>
           <div className="flex items-center space-x-2 mb-3">
             <span className={`font-pixel text-xs text-arcade-neon-${textColors[game.category]}`}>

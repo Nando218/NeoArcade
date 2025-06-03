@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import HomePage from '../src/pages/HomePage.jsx';
 
-// Mock GameCard to avoid rendering all game details
+// Simular GameCard para evitar renderizar todos los detalles del juego
 vi.mock('../src/components/games/game-card', () => ({
   GameCard: ({ game }) => <div data-testid="game-card">{game.title}</div>
 }));
@@ -25,11 +25,11 @@ describe('HomePage', () => {
 
   it('filters games by category', () => {
     render(<MemoryRouter><HomePage /></MemoryRouter>);
-    // Click on Puzzle
+    // Click en Puzzle
     fireEvent.click(screen.getByText(/Puzzle/i));
-    // Should only show games with category 'puzzle'
+    // Debe mostrar solo los juegos con categor a 'puzzle'
     const cards = screen.getAllByTestId('game-card');
-    expect(cards.length).toBeGreaterThanOrEqual(0); // At least 0, can't know exact without GAMES mock
+    expect(cards.length).toBeGreaterThanOrEqual(0); // Al menos 0, no podemos saber el exacto sin el mock de GAMES
   });
 
   it('renders the footer', () => {

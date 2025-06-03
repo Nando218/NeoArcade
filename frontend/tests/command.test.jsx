@@ -8,7 +8,7 @@ beforeAll(() => {
     unobserve() {}
     disconnect() {}
   };
-  // Mock scrollIntoView for all elements
+  // Simula el scrollIntoView para todos los elementos
   if (!HTMLElement.prototype.scrollIntoView) {
     HTMLElement.prototype.scrollIntoView = function () {};
   }

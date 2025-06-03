@@ -2,7 +2,7 @@ import { render, screen, fireEvent, act } from '@testing-library/react';
 import React from 'react';
 import { TicTacToeGame } from '../src/games/tictactoe/tictactoe-game';
 
-// Mock hooks and dependencies
+// Mockea hooks y dependencias
 vi.mock('../src/hooks/use-mobile', () => ({ useIsMobile: () => false }));
 vi.mock('../src/lib/scores', () => ({ useScores: () => ({ addScore: vi.fn().mockResolvedValue() }) }));
 vi.mock('../src/lib/auth', () => ({ useAuth: () => ({ isAuthenticated: true }) }));
@@ -30,14 +30,14 @@ describe('TicTacToeGame', () => {
 
   it.skip('shows RESET button after game ends', () => {
     render(<TicTacToeGame />);
-    // Simulate a win for player
+    // Simula una victoria del jugador
     act(() => {
-      // X X X in first row
+      // X X X en las primeras 3 celdas
       fireEvent.click(screen.getAllByText('', { selector: 'div.bg-arcade-dark' })[0]);
       fireEvent.click(screen.getAllByText('', { selector: 'div.bg-arcade-dark' })[1]);
       fireEvent.click(screen.getAllByText('', { selector: 'div.bg-arcade-dark' })[2]);
     });
-    // Fallback: check for ArcadeButton by class and textContent
+    // Alternativa: busca ArcadeButton por clase y textContent
     const arcadeButtons = document.querySelectorAll('.font-arcade');
     const found = Array.from(arcadeButtons).some(btn => btn.textContent && btn.textContent.match(/reset/i));
     expect(found).toBe(true);

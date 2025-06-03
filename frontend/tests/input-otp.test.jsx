@@ -3,6 +3,6 @@ import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator } from '@/comp
 
 describe('InputOTP', () => {
   it.skip('renders input otp group and slots', () => {
-    // Skipped: context/index issues in jsdom
+    // Saltado: problemas de contexto/index en jsdom
   });
 });

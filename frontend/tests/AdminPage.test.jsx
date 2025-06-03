@@ -18,7 +18,7 @@ vi.mock('../src/lib/api', () => ({
 describe('AdminPage', () => {
   it('renders admin page', () => {
     render(<MemoryRouter><AdminPage /></MemoryRouter>);
-    // Assert for the USERS button which is unique to the admin page
+    // Asegura que se renderice el boton USUARIOS que es unico de la pagina de administrador
     expect(screen.getByRole('button', { name: /users/i })).toBeInTheDocument();
   });
 });

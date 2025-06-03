@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useAuth } from '@/lib/auth';
 import { Input } from '@/components/ui/input';
@@ -30,7 +29,7 @@ export function RegisterForm() {
     }
     
     try {
-      // Trim whitespace from inputs to prevent issues
+      // Eliminar espacios en blanco de los inputs para evitar problemas
       const trimmedUsername = username.trim();
       const trimmedEmail = email.trim();
       const trimmedPassword = password.trim();

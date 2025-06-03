@@ -3,6 +3,6 @@ import { Form } from '@/components/ui/form';
 
 describe('Form', () => {
   it.skip('renders a form', () => {
-    // Skipped: Form may not render a native <form> element
+    // Saltado: Form puede no renderizar un elemento <form> nativo
   });
 });

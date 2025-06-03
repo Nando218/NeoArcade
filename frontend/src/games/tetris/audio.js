@@ -1,4 +1,3 @@
-
 export class Audio {
   constructor() {
     this.context = null;
@@ -8,7 +7,7 @@ export class Audio {
 
   createAudioContext() {
     try {
-      // Create audio context on demand to avoid autoplay policy issues
+      // Crear el contexto de audio bajo demanda para evitar problemas con la política de reproducción automática
       window.AudioContext = window.AudioContext || window.webkitAudioContext;
       this.context = new AudioContext();
     } catch (e) {
@@ -17,7 +16,7 @@ export class Audio {
   }
 
   ensureContext() {
-    // Create or resume the audio context when needed
+    // Crear o reanudar el contexto de audio cuando sea necesario
     if (!this.context) {
       this.createAudioContext();
     } else if (this.context.state === 'suspended') {
@@ -25,7 +24,7 @@ export class Audio {
     }
   }
 
-  // Create sound with oscilator
+  // Crear sonido con oscilador
   createOscillator(freq, type, duration) {
     if (!this.context || this.isMuted) return;
     
@@ -47,7 +46,7 @@ export class Audio {
     oscillator.stop(this.context.currentTime + duration);
   }
 
-  // Sound effects
+  // Efectos de sonido
   playMove() {
     this.createOscillator(220, 'sine', 0.05);
   }

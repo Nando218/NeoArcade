@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import GameOverGlitchText from "./GameOverGlitchText";
 
-// TETROMINOS SHAPES
+// FORMAS DE LOS TETRIMINOS
 const TETROMINOS = {
   0: { shape: [[0]], color: '0, 0, 0' },
   I: {
@@ -28,7 +28,7 @@ const TETROMINOS = {
       [0, 'I', 0, 0],
       [0, 'I', 0, 0]
     ],
-    color: '80, 227, 230', // cyan
+    color: '80, 227, 230', // cian
   },
   J: {
     shape: [
@@ -36,7 +36,7 @@ const TETROMINOS = {
       [0, 'J', 0],
       ['J', 'J', 0]
     ],
-    color: '36, 95, 223', // blue
+    color: '36, 95, 223', // azul
   },
   L: {
     shape: [
@@ -44,14 +44,14 @@ const TETROMINOS = {
       [0, 'L', 0],
       [0, 'L', 'L']
     ],
-    color: '223, 173, 36', // orange
+    color: '223, 173, 36', // naranja
   },
   O: {
     shape: [
       ['O', 'O'],
       ['O', 'O'],
     ],
-    color: '223, 217, 36', // yellow
+    color: '223, 217, 36', // amarillo
   },
   S: {
     shape: [
@@ -59,7 +59,7 @@ const TETROMINOS = {
       ['S', 'S', 0],
       [0, 0, 0]
     ],
-    color: '48, 211, 56', // green
+    color: '48, 211, 56', // verde
   },
   T: {
     shape: [
@@ -67,7 +67,7 @@ const TETROMINOS = {
       ['T', 'T', 'T'],
       [0, 'T', 0]
     ],
-    color: '132, 61, 198', // purple
+    color: '132, 61, 198', // morado
   },
   Z: {
     shape: [
@@ -75,41 +75,41 @@ const TETROMINOS = {
       [0, 'Z', 'Z'],
       [0, 0, 0]
     ],
-    color: '227, 78, 78', // red
+    color: '227, 78, 78', // rojo
   }
 };
 
-// Random Tetromino generator
+// Generador aleatorio de Tetriminos
 const randomTetromino = () => {
   const tetrominos = 'IJLOSTZ';
   const randTetromino = tetrominos[Math.floor(Math.random() * tetrominos.length)];
   return TETROMINOS[randTetromino];
 };
 
-// GAME CONSTANTS
+// CONSTANTES DEL JUEGO
 const STAGE_WIDTH = 12;
 const STAGE_HEIGHT = 20;
-const ROWPOINTS = [40, 100, 300, 1200]; // Points for 1, 2, 3, 4 rows
-const DROPTIME = 1000; // Initial drop time
+const ROWPOINTS = [40, 100, 300, 1200]; // Puntos por 1, 2, 3, 4 líneas
+const DROPTIME = 1000; // Tiempo de caída inicial
 
-// Create empty stage - 2D array filled with zeros
+// Crear escenario vacío - Array 2D lleno de ceros
 const createStage = () =>
   Array.from(Array(STAGE_HEIGHT), () =>
     new Array(STAGE_WIDTH).fill([0, 'clear'])
   );
 
-// Check if tetromino collides with boundaries or existing blocks
+// Comprobar si el tetrimino colisiona con los bordes o bloques existentes
 const checkCollision = (player, stage, { x: moveX, y: moveY }) => {
   for (let y = 0; y < player.tetromino.length; y += 1) {
     for (let x = 0; x < player.tetromino[0].length; x += 1) {
-      // 1. Check that we're on a tetromino cell
+      // 1. Comprobar que estamos en una celda del tetrimino
       if (player.tetromino[y][x] !== 0) {
         if (
-          // 2. Check movement is inside the game area height (y)
+          // 2. Comprobar que el movimiento está dentro del área de juego (altura)
           !stage[y + player.pos.y + moveY] ||
-          // 3. Check movement is inside the game area width (x)
+          // 3. Comprobar que el movimiento está dentro del área de juego (ancho)
           !stage[y + player.pos.y + moveY][x + player.pos.x + moveX] ||
-          // 4. Check if cell we're moving to isn't clear
+          // 4. Comprobar si la celda a la que nos movemos no está libre
           stage[y + player.pos.y + moveY][x + player.pos.x + moveX][1] !== 'clear'
         ) {
           return true;
@@ -125,7 +125,7 @@ export function TetrisGame() {
   const { addScore } = useScores();
   const isMobile = useIsMobile();
   
-  // Game states
+  // Estados del juego
   const [dropTime, setDropTime] = useState(null);
   const [gameOver, setGameOver] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
@@ -137,24 +137,24 @@ export function TetrisGame() {
   const [stage, setStage] = useState(createStage());
   const [nextTetromino, setNextTetromino] = useState(null);
   
-  // Player state - with tetromino, position and collision detection
+  // Estado del jugador - con tetrimino, posición y detección de colisión
   const [player, setPlayer] = useState({
     pos: { x: 0, y: 0 },
     tetromino: TETROMINOS[0].shape,
     collided: false,
   });
 
-  // Refs
+  // Referencias
   const canvasRef = useRef(null);
   const audioRef = useRef(new Audio());
 
-  // Effect to load high score from local storage
+  // Efecto para cargar la puntuación más alta del almacenamiento local
   useEffect(() => {
     const storedHighScore = localStorage.getItem('tetrisHighScore') || 0;
     setHighScore(Number(storedHighScore));
   }, []);
 
-  // Prevent scrolling when game is active
+  // Prevenir el scroll cuando el juego está activo
   useEffect(() => {
     if (gameStarted) {
       const originalStyle = document.body.style.overflow;
@@ -165,14 +165,14 @@ export function TetrisGame() {
     }
   }, [gameStarted]);
 
-  // Update stage (playing field)
+  // Actualizar el escenario (campo de juego)
   const updateStage = useCallback(prevStage => {
-    // First flush the stage
+    // Primero limpiar el escenario
     const newStage = prevStage.map(row =>
       row.map(cell => (cell[1] === 'clear' ? [0, 'clear'] : cell))
     );
 
-    // Then draw the tetromino
+    // Luego dibujar el tetrimino
     if (player.tetromino) {
       player.tetromino.forEach((row, y) => {
         row.forEach((value, x) => {
@@ -186,7 +186,7 @@ export function TetrisGame() {
       });
     }
     
-    // Check if we collided
+    // Comprobar si colisionamos
     if (player.collided) {
       resetPlayer();
       return sweepRows(newStage);
@@ -195,14 +195,14 @@ export function TetrisGame() {
     return newStage;
   }, [player]);
 
-  // Update stage on player movement
+  // Actualizar el escenario al mover el jugador
   useEffect(() => {
     if (!gameOver && gameStarted && !isPaused) {
       setStage(prev => updateStage(prev));
     }
   }, [player, updateStage, gameOver, gameStarted, isPaused]);
 
-  // Draw game on canvas
+  // Dibujar el juego en el canvas
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -210,15 +210,15 @@ export function TetrisGame() {
     const ctx = canvas.getContext('2d');
     const cellSize = canvas.width / STAGE_WIDTH;
 
-    // Clear canvas
+    // Limpiar canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = '#111';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Draw grid lines
+    // Dibujar líneas de la cuadrícula
     ctx.strokeStyle = '#333';
     
-    // Horizontal lines
+    // Líneas horizontales
     for (let y = 0; y <= STAGE_HEIGHT; y++) {
       ctx.beginPath();
       ctx.moveTo(0, y * cellSize);
@@ -226,7 +226,7 @@ export function TetrisGame() {
       ctx.stroke();
     }
     
-    // Vertical lines
+    // Líneas verticales
     for (let x = 0; x <= STAGE_WIDTH; x++) {
       ctx.beginPath();
       ctx.moveTo(x * cellSize, 0);
@@ -234,7 +234,7 @@ export function TetrisGame() {
       ctx.stroke();
     }
 
-    // Draw filled cells
+    // Dibujar celdas rellenas
     stage.forEach((row, y) => {
       row.forEach((cell, x) => {
         if (cell[0] !== 0) {
@@ -244,7 +244,7 @@ export function TetrisGame() {
           ctx.fillStyle = `rgba(${color}, 1)`;
           ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
           
-          // Border for the cell
+          // Borde de la celda
           ctx.strokeStyle = '#000';
           ctx.lineWidth = 1;
           ctx.strokeRect(x * cellSize, y * cellSize, cellSize, cellSize);
@@ -253,7 +253,7 @@ export function TetrisGame() {
     });
   }, [stage]);
 
-  // Draw preview tetromino
+  // Dibujar el tetrimino de previsualización
   const drawPreviewTetromino = useCallback(() => {
     if (!nextTetromino || !canvasRef.current) return;
     
@@ -261,20 +261,20 @@ export function TetrisGame() {
     if (!previewCanvas) return;
     
     const ctx = previewCanvas.getContext('2d');
-    const cellSize = previewCanvas.width / 6; // Smaller cells for preview
+    const cellSize = previewCanvas.width / 6; // Celdas más pequeñas para la previsualización
     
-    // Clear canvas
+    // Limpiar canvas
     ctx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
     ctx.fillStyle = '#111';
     ctx.fillRect(0, 0, previewCanvas.width, previewCanvas.height);
     
     const tetro = nextTetromino;
     
-    // Calculate center position
+    // Calcular posición centrada
     const offsetX = (6 - tetro.shape[0].length) / 2;
     const offsetY = (6 - tetro.shape.length) / 2;
     
-    // Draw tetromino
+    // Dibujar tetrimino
     tetro.shape.forEach((row, y) => {
       row.forEach((value, x) => {
         if (value !== 0) {
@@ -286,7 +286,7 @@ export function TetrisGame() {
             cellSize
           );
           
-          // Border for the cell
+          // Borde de la celda
           ctx.strokeStyle = '#000';
           ctx.lineWidth = 1;
           ctx.strokeRect(
@@ -304,7 +304,7 @@ export function TetrisGame() {
     drawPreviewTetromino();
   }, [nextTetromino, drawPreviewTetromino]);
 
-  // Reset player position and generate new tetromino
+  // Reiniciar la posición del jugador y generar nuevo tetrimino
   const resetPlayer = useCallback(() => {
     let newTetromino;
     
@@ -314,7 +314,7 @@ export function TetrisGame() {
       newTetromino = randomTetromino();
     }
     
-    // Generate next tetromino
+    // Generar siguiente tetrimino
     setNextTetromino(randomTetromino());
     
     setPlayer({
@@ -323,7 +323,7 @@ export function TetrisGame() {
       collided: false,
     });
     
-    // Check if game over (collision immediately after reset)
+    // Comprobar si es game over (colisión inmediata tras reiniciar)
     if (checkCollision(
       { pos: { x: STAGE_WIDTH / 2 - 2, y: 0 }, tetromino: newTetromino.shape, collided: false },
       stage,
@@ -333,15 +333,15 @@ export function TetrisGame() {
     }
   }, [nextTetromino, stage]);
 
-  // Check for completed rows and clear them
+  // Comprobar filas completas y limpiarlas
   const sweepRows = useCallback((newStage) => {
     let rowsCleared = 0;
     
     const stage = newStage.reduce((acc, row) => {
-      // If no cell in the row has a 0, it means the row is full
+      // Si ninguna celda de la fila es 0, la fila está llena
       if (row.findIndex(cell => cell[0] === 0) === -1) {
         rowsCleared += 1;
-        // Add empty row at the beginning
+        // Añadir fila vacía al principio
         acc.unshift(new Array(newStage[0].length).fill([0, 'clear']));
         return acc;
       }
@@ -350,10 +350,10 @@ export function TetrisGame() {
     }, []);
     
     if (rowsCleared > 0) {
-      // Play sound
+      // Reproducir sonido
       audioRef.current.playLineClear();
       
-      // Update score
+      // Actualizar puntuación
       setRows(prev => prev + rowsCleared);
       setScore(prev => prev + ROWPOINTS[rowsCleared - 1] * level);
     }
@@ -361,7 +361,7 @@ export function TetrisGame() {
     return stage;
   }, [level]);
 
-  // Move tetromino left or right
+  // Mover tetrimino a la izquierda o derecha
   const movePlayer = useCallback((dir) => {
     if (!gameStarted || isPaused || gameOver) return;
     
@@ -374,7 +374,7 @@ export function TetrisGame() {
     }
   }, [checkCollision, gameStarted, isPaused, gameOver, player, stage]);
   
-  // Drop tetromino one row
+  // Bajar el tetrimino una fila
   const dropPlayer = useCallback(() => {
     if (!gameStarted || isPaused || gameOver) return;
     
@@ -384,13 +384,13 @@ export function TetrisGame() {
         pos: { x: prev.pos.x, y: prev.pos.y + 1 }
       }));
     } else {
-      // Game over check
+      // Comprobar game over
       if (player.pos.y < 1) {
         handleGameOver();
         return;
       }
       
-      // Merge tetromino with stage
+      // Unir tetrimino con el escenario
       setPlayer(prev => ({
         ...prev,
         collided: true
@@ -399,7 +399,7 @@ export function TetrisGame() {
     }
   }, [checkCollision, gameStarted, isPaused, gameOver, player, stage]);
   
-  // Hard drop - tetromino falls to bottom instantly
+  // Caída rápida - el tetrimino cae hasta el fondo instantáneamente
   const hardDrop = useCallback(() => {
     if (!gameStarted || isPaused || gameOver) return;
     
@@ -417,14 +417,14 @@ export function TetrisGame() {
     audioRef.current.playHardDrop();
   }, [checkCollision, gameStarted, isPaused, gameOver, player, stage]);
 
-  // Rotate tetromino
+  // Rotar tetrimino
   const rotate = useCallback((tetromino, dir) => {
-    // Make rows become columns (transpose)
+    // Hacer que las filas se conviertan en columnas (transponer)
     const rotatedTetro = tetromino.map((_, index) =>
       tetromino.map(col => col[index])
     );
     
-    // Reverse each row to get a rotated matrix
+    // Invertir cada fila para obtener la matriz rotada
     if (dir > 0) return rotatedTetro.map(row => row.reverse());
     return rotatedTetro.reverse();
   }, []);
@@ -435,16 +435,16 @@ export function TetrisGame() {
     const clonedPlayer = JSON.parse(JSON.stringify(player));
     clonedPlayer.tetromino = rotate(clonedPlayer.tetromino, dir);
     
-    // Collision detection with walls - "wall kick"
+    // Detección de colisión con paredes - "wall kick"
     const pos = clonedPlayer.pos.x;
     let offset = 1;
     
     while (checkCollision(clonedPlayer, stage, { x: 0, y: 0 })) {
-      // Try to move left and right to avoid collision
+      // Intentar mover a la izquierda y derecha para evitar colisión
       clonedPlayer.pos.x += offset;
       offset = -(offset + (offset > 0 ? 1 : -1));
       
-      // If offset becomes too large, rotation is not possible
+      // Si el offset es demasiado grande, la rotación no es posible
       if (offset > clonedPlayer.tetromino[0].length) {
         rotate(clonedPlayer.tetromino, -dir);
         clonedPlayer.pos.x = pos;
@@ -456,25 +456,25 @@ export function TetrisGame() {
     audioRef.current.playRotate();
   }, [player, stage, rotate, gameStarted, isPaused, gameOver]);
 
-  // Handle keyboard input
+  // Manejar entrada del teclado
   useEffect(() => {
     const handleKeyDown = ({ keyCode }) => {
       if (!gameStarted || isPaused || gameOver) return;
       
       switch (keyCode) {
-        case 37: // Left arrow
+        case 37: // Flecha izquierda
           movePlayer(-1);
           break;
-        case 39: // Right arrow
+        case 39: // Flecha derecha
           movePlayer(1);
           break;
-        case 40: // Down arrow
+        case 40: // Flecha abajo
           dropPlayer();
           break;
-        case 38: // Up arrow
+        case 38: // Flecha arriba
           playerRotate(1);
           break;
-        case 32: // Space
+        case 32: // Espacio
           hardDrop();
           break;
         default:
@@ -488,7 +488,7 @@ export function TetrisGame() {
     };
   }, [movePlayer, dropPlayer, playerRotate, hardDrop, gameStarted, isPaused, gameOver]);
 
-  // Handle game level and speed
+  // Manejar nivel y velocidad del juego
   useEffect(() => {
     const linePerLevel = 10;
     const newLevel = Math.floor(rows / linePerLevel) + 1;
@@ -496,10 +496,10 @@ export function TetrisGame() {
     if (newLevel !== level) {
       setLevel(newLevel);
       if (gameStarted && !isPaused && !gameOver) {
-        // Increase speed with level (decrease dropTime)
+        // Aumentar velocidad con el nivel (disminuir dropTime)
         setDropTime(Math.max(100, DROPTIME - (newLevel - 1) * 100));
         
-        // Notify about level up
+        // Notificar subida de nivel
         toast({
           title: `Level ${newLevel}!`,
           description: "Speed has increased.",
@@ -509,7 +509,7 @@ export function TetrisGame() {
     }
   }, [rows, level, gameStarted, isPaused, gameOver]);
 
-  // Update high score
+  // Actualizar puntuación más alta
   useEffect(() => {
     if (score > highScore) {
       setHighScore(score);
@@ -517,14 +517,14 @@ export function TetrisGame() {
     }
   }, [score, highScore]);
 
-  // Auto drop interval
+  // Intervalo de caída automática
   useInterval(() => {
     dropPlayer();
   }, dropTime);
 
-  // Start game
+  // Iniciar juego
   const startGame = () => {
-    // Reset everything
+    // Reiniciar todo
     setStage(createStage());
     setDropTime(DROPTIME);
     setGameOver(false);
@@ -538,14 +538,14 @@ export function TetrisGame() {
     audioRef.current.playStart();
   };
 
-  // Handle game over
+  // Manejar game over
   const handleGameOver = async () => {
     setGameOver(true);
     setGameStarted(false);
     setDropTime(null);
     audioRef.current.playGameOver();
     
-    // Save score if user is authenticated
+    // Guardar puntuación si el usuario está autenticado
     if (isAuthenticated && user && score > 0) {
       try {
         await addScore({
@@ -554,38 +554,38 @@ export function TetrisGame() {
         });
 
         toast({
-          title: "Score saved!",
-          description: `Your score of ${score} has been saved.`
+          title: "¡Puntuación guardada!",
+          description: `Tu puntuación de ${score} ha sido guardada.`
         });
       } catch (error) {
-        console.error("Error saving score:", error);
+        console.error("Error al guardar la puntuación:", error);
         toast({
-          title: "Error saving score",
-          description: "Your score could not be saved. Please try again.",
+          title: "Error al guardar la puntuación",
+          description: "No se pudo guardar tu puntuación. Inténtalo de nuevo.",
           variant: "destructive",
         });
       }
     }
   };
 
-  // Pause/Resume game
+  // Pausar/Reanudar juego
   const togglePause = () => {
     if (!gameStarted || gameOver) return;
     
     if (isPaused) {
-      // Resume
+      // Reanudar
       setDropTime(Math.max(100, DROPTIME - (level - 1) * 100));
       setIsPaused(false);
       audioRef.current.playStart();
     } else {
-      // Pause
+      // Pausar
       setDropTime(null);
       setIsPaused(true);
       audioRef.current.playPause();
     }
   };
 
-  // Mobile controls handler
+  // Manejador de controles móviles
   const handleMobileButtonPress = (action) => {
     if (!gameStarted || isPaused || gameOver) return;
 
@@ -614,7 +614,7 @@ export function TetrisGame() {
     <div className="flex flex-col items-center">
       <div className={`flex ${isMobile ? "flex-col" : "flex-row"} items-start justify-center gap-6`}>
         <div className="flex flex-col items-center">
-          {/* Score and level panel */}
+          {/* Panel de puntuacion y nivel */}
           <div className="flex justify-between w-full max-w-[400px] mb-3">
             <div className="text-center">
               <p className="text-sm font-pixel text-gray-300 mb-1">SCORE</p>
@@ -634,7 +634,7 @@ export function TetrisGame() {
             </div>
           </div>
 
-          {/* Game area */}
+          {/* Area de juego */}
           <div className="relative bg-arcade-dark border-2 border-arcade-neon-blue shadow-[0_0_8px_rgba(0,255,255,0.6)] rounded-md overflow-hidden">
             <canvas
               ref={canvasRef}
@@ -662,7 +662,7 @@ export function TetrisGame() {
               </div>
             )}
 
-            {/* Start screen overlay */}
+            {/* Pantalla de inicio overlay */}
             {!gameStarted && !gameOver && (
               <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center p-4">
                 <div className="flex flex-col items-center gap-3">
@@ -687,7 +687,7 @@ export function TetrisGame() {
             )}
           </div>
 
-          {/* Game controls - Desktop */}
+          {/* Controles - Escritorio */}
           {!isMobile && gameStarted && !gameOver && (
             <div className="mt-4 flex gap-4 justify-center">
               <ArcadeButton
@@ -719,10 +719,10 @@ export function TetrisGame() {
             </div>
           )}
 
-          {/* Mobile Controls - Only visible on mobile */}
+          {/* Controles móvil - Sólo visible en móvil */}
           {isMobile && gameStarted && !gameOver && (
             <div className="mt-4 w-full max-w-[400px]">
-              {/* Game control buttons */}
+              {/* Botones de control */}
               <div className="flex justify-center gap-4 mb-4">
                 <ArcadeButton
                   onClick={togglePause}
@@ -754,9 +754,9 @@ export function TetrisGame() {
                 </ArcadeButton>
               </div>
 
-              {/* Directional controls */}
+              {/* controles direccionales */}
               <div className="flex flex-col items-center gap-2">
-                {/* Rotation button */}
+                {/* botón de rotación */}
                 <ArcadeButton
                   onClick={() => handleMobileButtonPress("rotate")}
                   variant="blue"
@@ -765,7 +765,7 @@ export function TetrisGame() {
                   <RotateCcw size={24} />
                 </ArcadeButton>
 
-                {/* Left, Down, Right buttons */}
+                {/* izquierda, abajo, derecha botones */}
                 <div className="flex gap-2 mt-1">
                   <ArcadeButton
                     onClick={() => handleMobileButtonPress("left")}
@@ -792,22 +792,22 @@ export function TetrisGame() {
                   </ArcadeButton>
                 </div>
 
-                {/* Hard drop button */}
+                {/* Caída rápida */}
                 <ArcadeButton
                   onClick={() => handleMobileButtonPress("drop")}
                   variant="pink"
                   className="mt-2 w-full text-black font-pixel"
                 >
-                  CAÍDA RÁPIDA
+                  Fast drop
                 </ArcadeButton>
               </div>
             </div>
           )}
         </div>
 
-        {/* Side panel with next piece and instructions */}
+        {/* Panel lateral con la pieza siguiente e instrucciones */}
         <div className={`flex flex-col gap-4 ${isMobile ? "w-full mt-4" : "w-[220px]"}`}>
-          {/* Next piece preview */}
+          {/* preview de la siguiente pieza */}
           <div className="bg-arcade-dark p-3">
             <h3 className="text-arcade-neon-blue font-pixel mb-2 text-center">Next Piece:</h3>
             <div className="flex justify-center">
@@ -820,7 +820,7 @@ export function TetrisGame() {
             </div>
           </div>
           
-          {/* Controls */}
+          {/* Controles */}
           <div className="bg-arcade-dark border border-arcade-neon-blue/30 rounded-md p-3">
             <h3 className="text-arcade-neon-blue font-pixel mb-2">Controls:</h3>
             <ul className="text-sm text-gray-300 font-pixel space-y-1">

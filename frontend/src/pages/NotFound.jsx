@@ -17,13 +17,13 @@ export default function NotFound() {
               404
             </NeonText>
             <NeonText color="blue" className="text-2xl mb-6">
-              PÁGINA NO ENCONTRADA
+              PAGE NOT FOUND
             </NeonText>
           </div>
           
           <p className="text-gray-300 font-pixel mb-8 max-w-md mx-auto">
-            GAME OVER - La página que buscas no existe en el universo de NeoArcade.
-            ¿Quieres volver a la pantalla de inicio para continuar jugando?
+            GAME OVER - The page you are looking for does not exist in the Rewind Arcade universe.
+            Want to go back to the home screen to keep playing?
           </p>
           
           <Link to="/">

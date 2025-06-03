@@ -39,7 +39,7 @@ function ContactFormPopup() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setSubmitted(true);
-    // EmailJS integration
+    // EmailJS 
     emailjs.send(
       EMAILJS_SERVICE_ID,
       EMAILJS_TEMPLATE_ID,
@@ -51,7 +51,7 @@ function ContactFormPopup() {
       EMAILJS_PUBLIC_KEY
     ).then(
       (result) => {
-        // Success: show sent message, reset form
+        // Éxito: mostrar mensaje enviado, restablecer formulario
         setTimeout(() => {
           setOpen(false);
           setSubmitted(false);
@@ -59,7 +59,7 @@ function ContactFormPopup() {
         }, 1200);
       },
       (error) => {
-        // Error: show error, reset submitted
+        // Error: muestra error, restablece submitted
         setSubmitted(false);
         alert("Error sending message. Please try again later.");
       }

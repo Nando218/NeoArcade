@@ -8,6 +8,6 @@ describe('Checkbox', () => {
     const checkbox = screen.getByTestId('checkbox');
     expect(checkbox).toBeInTheDocument();
     fireEvent.click(checkbox);
-    // No checked attribute, but should not throw
+    // No hay atributo checked, pero no deberia lanzar un error
   });
 });

@@ -14,6 +14,7 @@ import { ArrowLeft } from 'lucide-react';
 import { useScores } from '@/lib/scores';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useAuth } from '@/lib/auth';
+import GameOverGlitchText from '@/games/tetris/GameOverGlitchText';
 
 export default function GamePage() {
   const { gameId } = useParams();
@@ -30,7 +31,7 @@ export default function GamePage() {
     }
   }, [game, navigate]);
   
-  // Load top scores
+  // Cargar puntuaciones máximas
   useEffect(() => {
     if (game) {
       fetchScoresByGame(game.id, 5).then(() => {
@@ -64,11 +65,11 @@ export default function GamePage() {
     }
   };
 
-  // Handler para borrar puntuación
+  // Manejador para borrar puntuación
   const handleDeleteScore = async (scoreId) => {
     if (!window.confirm('Are you sure you want to delete this score?')) return;
     await deleteScore(scoreId);
-    // Refrescar top scores
+    // Refrescar puntuaciones máximas
     fetchScoresByGame(game.id, 5).then(() => {
       setTopScores(getTopScoresByGame(game.id, 5));
     });
@@ -88,17 +89,17 @@ export default function GamePage() {
             
             <div className={`bg-arcade-dark border-2 border-arcade-neon-blue/50 shadow-[0_0_15px_rgba(0,255,255,0.2)] rounded-lg p-4 ${isMobile ? 'p-2' : 'p-4'}`}>
               <div className="text-center mb-3">
-                <span className={`${isMobile ? 'text-xl' : 'text-4xl'} mb-2`}>
-                  {game.name}
+                <span className="mb-2">
+                  <GameOverGlitchText text={game.name} className="text-lg md:text-3xl" />
                 </span>
               </div>
               
-              {/* Main game content */}
+              {/* Contenido principal del juego */}
               <div className="flex justify-center overflow-hidden">
                 {renderGame()}
               </div>
               
-              {/* Top scores (only shown for games other than Tetris) */}
+              {/* Puntuaciones máximas (solo se muestran para juegos diferentes de Tetris) */}
               {game.id !== 'tetris' && (
                 <div className="mt-4 flex justify-center">
                   <div className="bg-arcade-dark border border-arcade-neon-blue/30 rounded-lg p-3 w-full max-w-md">

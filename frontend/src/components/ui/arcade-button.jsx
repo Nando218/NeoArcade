@@ -3,7 +3,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from './button';
 
-// Define variant colors
+// Define colores y estilos para cada variante
 const variantColors = {
   blue: 'bg-arcade-neon-blue hover:bg-opacity-80 text-arcade-dark border-arcade-neon-blue',
   pink: 'bg-arcade-neon-pink hover:bg-opacity-80 text-arcade-dark border-arcade-neon-pink',

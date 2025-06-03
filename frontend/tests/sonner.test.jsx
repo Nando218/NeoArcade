@@ -3,6 +3,6 @@ import { Toaster } from '@/components/ui/sonner';
 
 describe('Sonner Toaster', () => {
   it.skip('renders the sonner toaster', () => {
-    // Skipped: window.matchMedia is not defined in jsdom
+    // Saltado: window.matchMedia no está definido en jsdom
   });
 });

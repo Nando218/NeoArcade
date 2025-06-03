@@ -47,7 +47,7 @@ describe('Tooltip', () => {
   //   expect(tooltips.length).toBeGreaterThan(0);
   //   expect(tooltips[0]).toBeInTheDocument();
   // });
-  // Nota: Este test no es compatible con JSDOM + Radix UI overlays, ver documentación en tests/breadcrumb.test.jsx
+  // Nota: Este test no es compatible con JSDOM + Radix UI overlays
 
   it('hides tooltip content on blur', async () => {
     render(

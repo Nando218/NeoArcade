@@ -7,5 +7,5 @@ describe('Leaderboard', () => {
     const { container } = render(<Leaderboard />);
     expect(container).toBeInTheDocument();
   });
-  // Add more tests for filtering, loading, and error states if needed
+
 });

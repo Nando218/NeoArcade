@@ -207,4 +207,4 @@ export function Connect4Game() {
   );
 }
 
-// TODO: Implementar checkWinner correctamente (horizontal, vertical, diagonal)
+

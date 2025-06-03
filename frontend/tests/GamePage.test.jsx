@@ -23,6 +23,6 @@ vi.mock('react-router-dom', async (importOriginal) => {
 
 describe.skip('GamePage', () => {
   it('renders game page', () => {
-    // Skipped due to jsdom canvas/Web Audio API limitations
+    // Saltado debido a las limitaciones de jsdom en el API de canvas y Web Audio
   });
 });

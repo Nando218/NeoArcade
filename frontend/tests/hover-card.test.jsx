@@ -3,7 +3,7 @@ import { HoverCard, HoverCardTrigger, HoverCardContent } from '@/components/ui/h
 
 describe('HoverCard', () => {
   it.skip('renders hover card content', () => {
-    // jsdom limitation: hover card content is not rendered unless opened
+    // limitación de jsdom: el contenido de la tarjeta flotante no se renderiza a menos que esté abierto
     const { getByText } = render(
       <HoverCard>
         <HoverCardTrigger>Trigger</HoverCardTrigger>

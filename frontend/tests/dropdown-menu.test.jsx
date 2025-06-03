@@ -12,7 +12,7 @@ import {
 
 describe('DropdownMenu', () => {
   it.skip('renders dropdown menu content', () => {
-    // jsdom limitation: menu content is not rendered unless opened
+    // Limitación de jsdom: el contenido del menú no se renderiza a menos que esté abierto
     const { getByText } = render(
       <DropdownMenu>
         <DropdownMenuTrigger>Open</DropdownMenuTrigger>
@@ -33,9 +33,7 @@ describe('DropdownMenu', () => {
   });
   it.skip('renders and opens dropdown menu', async () => {
     // No es posible testear la apertura del menú en JSDOM debido a la implementación de overlays/portals en Radix UI.
-    // Ver: https://github.com/radix-ui/primitives/issues/1672
-    // Si se requiere cobertura, priorizar tests en componentes sin overlays.
-    // El test se deja como skip para documentar la limitación.
+        // El test se deja como skip para documentar la limitación.
     render(
       <DropdownMenu>
         <DropdownMenuTrigger>Open menu</DropdownMenuTrigger>

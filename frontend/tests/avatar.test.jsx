@@ -15,7 +15,7 @@ describe('Avatar', () => {
         <AvatarFallback>AB</AvatarFallback>
       </Avatar>
     );
-    // AvatarPrimitive.Image may render as <span> in test env if src is not loaded, so check fallback
+    // AvatarPrimitive.Image puede renderizar como <span> en entorno de prueba si src no se carga, asi que verificamos el fallback
     expect(container.textContent).toContain('AB');
   });
 

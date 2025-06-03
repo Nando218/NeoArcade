@@ -7,7 +7,7 @@ vi.mock('../src/lib/scores', () => ({ useScores: () => ({ addScore: vi.fn() }) }
 vi.mock('../src/hooks/use-mobile', () => ({ useIsMobile: () => false }));
 vi.mock('../src/hooks/use-toast', () => ({ toast: { success: vi.fn(), error: vi.fn(), info: vi.fn() } }));
 
-// Basic smoke test for TetrisGame
+// Prueba de humo basica para Tetris
 
 describe('TetrisGame', () => {
   it.skip('renders without crashing and shows Start button', () => {

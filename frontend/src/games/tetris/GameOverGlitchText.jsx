@@ -1,8 +1,6 @@
 import React from "react";
 
-/**
- * GameOverGlitchText - Glitch effect for "Game Over" text inspired by reactbits.dev
- */
+
 export default function GameOverGlitchText({ text = "GAME OVER", className = "" }) {
   return (
     <span

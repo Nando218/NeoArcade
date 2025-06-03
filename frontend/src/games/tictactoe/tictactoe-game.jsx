@@ -13,26 +13,26 @@ const audio = new Audio();
 export function TicTacToeGame() {
   const [board, setBoard] = useState(Array(9).fill(null));
   const [isPlayerTurn, setIsPlayerTurn] = useState(true);
-  const [gameStatus, setGameStatus] = useState("playing"); // Changed initial state to "playing" instead of "waiting"
+  const [gameStatus, setGameStatus] = useState("playing"); // Estado inicial cambiado a "playing" en vez de "waiting"
   const [winner, setWinner] = useState(null); // null, 'player', 'ai', 'draw'
-  const [difficulty, setDifficulty] = useState("normal"); // easy, normal, hard
+  const [difficulty, setDifficulty] = useState("normal"); // fácil, normal, difícil
   const isMobile = useIsMobile();
   const { addScore } = useScores();
   const { isAuthenticated } = useAuth();
 
-  // Initialize the game automatically when component mounts
+  // Inicializar el juego automáticamente al montar el componente
   useEffect(() => {
     startGame();
   }, []);
 
-  // Start the game
+  // Iniciar el juego
   const startGame = () => {
     setBoard(Array(9).fill(null));
     setIsPlayerTurn(true);
     setGameStatus("playing");
     setWinner(null);
 
-    // Randomly set difficulty at the start of each game
+    // Selecciona la dificultad aleatoriamente al inicio de cada partida
     const difficulties = ["easy", "normal", "hard"];
     const randomDifficulty =
       difficulties[Math.floor(Math.random() * difficulties.length)];
@@ -40,12 +40,12 @@ export function TicTacToeGame() {
     // audio.playStart(); // Quitar sonido al iniciar
   };
 
-  // Reset the game
+  // Reiniciar el juego
   const resetGame = () => {
     startGame();
   };
 
-  // Player makes a move
+  // El jugador hace un movimiento
   const handlePlayerMove = (index) => {
     if (gameStatus !== "playing" || !isPlayerTurn || board[index] !== null)
       return;
@@ -60,20 +60,20 @@ export function TicTacToeGame() {
       audio.playMove();
     }
 
-    // Check if game is over after player's move
+    // Comprobar si el juego terminó después del movimiento del jugador
     const result = checkGameStatus(newBoard);
     if (result) {
       handleGameOver(result);
     }
   };
 
-  // AI makes a move
+  // La IA hace un movimiento
   useEffect(() => {
     if (gameStatus === "playing" && !isPlayerTurn) {
       const timeoutId = setTimeout(() => {
         let bestMove;
 
-        // Adjust AI behavior based on difficulty
+        // Ajustar el comportamiento de la IA según la dificultad
         switch (difficulty) {
           case "easy":
             bestMove = findRandomMove(board);
@@ -83,7 +83,7 @@ export function TicTacToeGame() {
             break;
           case "normal":
           default:
-            // For normal difficulty, sometimes make the best move, sometimes make a random move
+            // Para dificultad normal, a veces hace el mejor movimiento, a veces uno aleatorio
             bestMove =
               Math.random() < 0.7 ? findBestMove(board) : findRandomMove(board);
             break;
@@ -101,13 +101,13 @@ export function TicTacToeGame() {
             handleGameOver(result);
           }
         }
-      }, 500); // Add a small delay to make AI move feel more natural
+      }, 500); // Añade un pequeño retardo para que el movimiento de la IA se sienta más natural
 
       return () => clearTimeout(timeoutId);
     }
   }, [board, isPlayerTurn, gameStatus, difficulty]);
 
-  // Handle game over
+  // Manejar el final del juego
   const handleGameOver = (result) => {
     setGameStatus("ended");
     setWinner(result);
@@ -124,16 +124,16 @@ export function TicTacToeGame() {
       } else {
         toast.success("Victory!");
       }
-      audio.playLineClear(); // Play win sound
+      audio.playLineClear(); // Reproducir sonido de victoria
     } else if (result === "ai") {
       toast.error("You lose. Try again.");
-      audio.playGameOver(); // Play lose sound
+      audio.playGameOver(); // Reproducir sonido de derrota
     } else {
       toast.info("Draw!");
     }
   };
 
-  // Check if game is over
+  // Comprobar si el juego ha terminado
   const checkGameStatus = (board) => {
     const lines = [
       [0, 1, 2],
@@ -146,7 +146,7 @@ export function TicTacToeGame() {
       [2, 4, 6],
     ];
 
-    // Check for winner
+    // Comprobar ganador
     for (let i = 0; i < lines.length; i++) {
       const [a, b, c] = lines[i];
       if (board[a] && board[a] === board[b] && board[a] === board[c]) {
@@ -154,7 +154,7 @@ export function TicTacToeGame() {
       }
     }
 
-    // Check for draw
+    // Comprobar empate
     if (!board.includes(null)) {
       return "draw";
     }
@@ -162,7 +162,7 @@ export function TicTacToeGame() {
     return null;
   };
 
-  // AI Logic: Find random move (for easy difficulty)
+  // Lógica IA: Encuentra un movimiento aleatorio (para dificultad fácil)
   const findRandomMove = (board) => {
     const emptySquares = board
       .map((value, index) => (value === null ? index : null))
@@ -173,12 +173,12 @@ export function TicTacToeGame() {
     return emptySquares[Math.floor(Math.random() * emptySquares.length)];
   };
 
-  // AI Logic: Find best move (using minimax algorithm)
+  // Lógica IA: Encuentra el mejor movimiento (usando algoritmo minimax)
   const findBestMove = (board) => {
-    // If there are no empty spaces, return -1
+    // Si no hay espacios vacíos, retorna -1
     if (!board.includes(null)) return -1;
 
-    // First, check if AI can win in one move
+    // Primero, comprueba si la IA puede ganar en un movimiento
     for (let i = 0; i < board.length; i++) {
       if (board[i] === null) {
         const newBoard = [...board];
@@ -189,7 +189,7 @@ export function TicTacToeGame() {
       }
     }
 
-    // Second, check if player can win in one move and block it
+    // Segundo, comprueba si el jugador puede ganar en un movimiento y bloquéalo
     for (let i = 0; i < board.length; i++) {
       if (board[i] === null) {
         const newBoard = [...board];
@@ -200,10 +200,10 @@ export function TicTacToeGame() {
       }
     }
 
-    // Third, take the center if it's free
+    // Tercero, toma el centro si está libre
     if (board[4] === null) return 4;
 
-    // Fourth, try to take the corners
+    // Cuarto, intenta tomar las esquinas
     const corners = [0, 2, 6, 8];
     const availableCorners = corners.filter((c) => board[c] === null);
     if (availableCorners.length > 0) {
@@ -212,7 +212,7 @@ export function TicTacToeGame() {
       ];
     }
 
-    // Finally, take any available edge
+    // Finalmente, toma cualquier borde disponible
     const edges = [1, 3, 5, 7];
     const availableEdges = edges.filter((e) => board[e] === null);
     if (availableEdges.length > 0) {
@@ -222,7 +222,7 @@ export function TicTacToeGame() {
     return -1;
   };
 
-  // Render cell with proper symbol
+  // Renderiza la celda con el símbolo correspondiente
   const renderCell = (index) => {
     const value = board[index];
 
@@ -278,7 +278,7 @@ export function TicTacToeGame() {
             <GameOverGlitchText text="YOU LOSE!" className="mb-4 text-red-600" />
           </div>
         )}
-        {/* Game board */}
+        {/* Tablero de juego */}
         <div className="grid grid-cols-3 gap-2 mx-auto">
           {board.map((_, index) => (
             <div key={index}>{renderCell(index)}</div>
@@ -286,7 +286,7 @@ export function TicTacToeGame() {
         </div>
       </div>
 
-      {/* Centered restart button when game is ended */}
+      {/* Botón de reinicio centrado cuando el juego ha terminado */}
       {gameStatus === "ended" && (
         <div className="flex justify-center mt-6">
           <ArcadeButton variant="cyan" onClick={startGame} className="mx-auto">

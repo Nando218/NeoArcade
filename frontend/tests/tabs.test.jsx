@@ -3,7 +3,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
 describe('Tabs', () => {
   it.skip('renders tabs and switches content', () => {
-    // Skipped: visibility assertion issues in jsdom
+    // Saltado: problemas de aserci n de visibilidad en jsdom
     const { getByText, queryByText } = render(
       <Tabs defaultValue="tab1">
         <TabsList>

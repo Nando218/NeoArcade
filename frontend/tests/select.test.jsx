@@ -3,7 +3,7 @@ import { Select, SelectTrigger, SelectContent, SelectItem } from '@/components/u
 
 describe('Select', () => {
   it.skip('renders select trigger and items', () => {
-    // jsdom limitation: select content is not rendered unless opened
+    // Limitacion de jsdom: el contenido del select no se renderiza a menos que este abierto
     const { getByText } = render(
       <Select>
         <SelectTrigger>Select an option</SelectTrigger>

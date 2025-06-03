@@ -18,7 +18,7 @@ describe('Footer', () => {
 
   it('renders contact form button and opens dialog', () => {
     render(<Footer />);
-    const mailButton = screen.getByRole('button', { hidden: true }); // Only button in social links
+    const mailButton = screen.getByRole('button', { hidden: true }); 
     expect(mailButton).toBeInTheDocument();
     fireEvent.click(mailButton);
     expect(screen.getByText(/any suggestions or comments/i)).toBeInTheDocument();
