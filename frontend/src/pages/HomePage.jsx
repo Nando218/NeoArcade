@@ -41,12 +41,12 @@ export default function HomePage() {
           </div>
           
           <div className="flex justify-center mb-8 overflow-x-auto py-2 no-scrollbar">
-            <div className="flex space-x-2">
+            <div className="flex flex-col gap-2 w-full max-w-xs sm:max-w-none sm:flex-row sm:space-x-2 sm:gap-0 sm:justify-center sm:items-center">
               {(['all', 'puzzle', 'action', 'strategy', 'classic']).map(category => (
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded font-pixel transition-all duration-200 whitespace-nowrap ${
+                  className={`px-4 py-3 rounded font-pixel text-base sm:text-sm transition-all duration-200 whitespace-nowrap w-full sm:w-auto ${
                     selectedCategory === category
                       ? 'bg-arcade-neon-blue text-black border-2 border-arcade-neon-blue shadow-[0_0_8px_rgba(0,255,255,0.7)]'
                       : 'bg-transparent border-2 border-arcade-neon-blue/30 text-arcade-neon-blue/80 hover:border-arcade-neon-blue hover:text-arcade-neon-blue'
