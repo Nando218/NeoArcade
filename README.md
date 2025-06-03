@@ -82,11 +82,22 @@ Open your browser at: [http://localhost:8080/](http://localhost:8080/)
 ---
 
 ## 🧪 Testing
-- Backend - 40.5% coverage
-![Backend - 40.5% coverage](https://github.com/user-attachments/assets/8e42d954-a5a8-488d-a7bf-60ccb3b9f23d)
+- Backend - 55.27% coverage
+![TestBack](https://github.com/user-attachments/assets/8d84eace-72b2-420a-9d06-e76cc94731a7)
 
-- Frontend - 37.3% coverage
-![Frontend - 37.3% coverage](https://github.com/user-attachments/assets/478850b5-4131-4ea1-8f98-7008d57223d4)
+```bash
+cd backend
+npm test
+```
+
+
+- Frontend - 51.89% coverage
+![TestFront](https://github.com/user-attachments/assets/3aca1b23-0ec8-48c0-8883-ae69788c841b)
+
+```bash
+cd frontend
+npx vitest run
+```
 
 - More tests coming soon...
 
