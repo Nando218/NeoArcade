@@ -159,21 +159,21 @@ export function Connect4Game() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center gap-2">
-      <div className="relative p-4 rounded-2xl shadow-2xl border border-green-500 min-w-[540px] min-h-[520px] flex items-center justify-center bg-transparent">
+    <div className="flex flex-col items-center justify-center gap-2 w-full px-1">
+      <div className="relative p-2 sm:p-4 rounded-2xl shadow-2xl border border-green-500 w-full max-w-[540px] min-h-[320px] sm:min-h-[520px] flex items-center justify-center bg-transparent">
         {/* Mensaje de victoria superpuesto */}
         {gameOver && winner === 1 && (
           <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-            <GameOverGlitchText text="YOU WIN!" className="text-white text-5xl md:text-7xl font-pixel text-center drop-shadow-[0_0_16px_white]" />
+            <GameOverGlitchText text="YOU WIN!" className="text-white text-3xl sm:text-5xl md:text-7xl font-pixel text-center drop-shadow-[0_0_16px_white]" />
           </div>
         )}
-        <div className="flex flex-col gap-2 z-10">
+        <div className="flex flex-col gap-1 sm:gap-2 z-10 w-full">
           {board.map((row, rIdx) => (
-            <div key={rIdx} className="grid grid-cols-7 gap-2">
+            <div key={rIdx} className="grid grid-cols-7 gap-1 sm:gap-2">
               {row.map((cell, cIdx) => (
                 <div
                   key={`${rIdx}-${cIdx}`}
-                  className={`w-14 h-14 rounded-full border-4 flex items-center justify-center cursor-pointer transition-all duration-200
+                  className={`w-8 h-8 sm:w-14 sm:h-14 rounded-full border-2 sm:border-4 flex items-center justify-center cursor-pointer transition-all duration-200
                     ${cell === EMPTY ? 'border-gray-700 bg-gradient-to-b from-[#232946] to-[#393e6c] hover:bg-pink-400/20' : ''}
                     ${cell === PLAYER ? 'bg-[radial-gradient(circle_at_30%_30%,#a21caf_70%,#9333ea_100%)] border-[#a21caf]' : ''}
                     ${cell === AI ? 'bg-[radial-gradient(circle_at_30%_30%,#22c55e_70%,#166534_100%)] border-[#22c55e]' : ''}
@@ -196,13 +196,13 @@ export function Connect4Game() {
         {gameOver && winner !== 1 && (
           <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
             {winner === 2 && (
-              <GameOverGlitchText text="YOU LOSE!" className="text-white text-5xl md:text-7xl font-pixel text-center drop-shadow-[0_0_16px_#22c55e]" />
+              <GameOverGlitchText text="YOU LOSE!" className="text-white text-3xl sm:text-5xl md:text-7xl font-pixel text-center drop-shadow-[0_0_16px_#22c55e]" />
             )}
-            {winner === 'draw' && <span className="font-pixel text-4xl md:text-5xl text-gray-300 bg-black/70 px-8 py-4 rounded-lg">Draw!</span>}
+            {winner === 'draw' && <span className="font-pixel text-2xl sm:text-4xl md:text-5xl text-gray-300 bg-black/70 px-4 sm:px-8 py-2 sm:py-4 rounded-lg">Draw!</span>}
           </div>
         )}
       </div>
-      <ArcadeButton onClick={resetGame}>Reset game</ArcadeButton>
+      <ArcadeButton onClick={resetGame} className="w-full max-w-[320px] mt-2">Reset game</ArcadeButton>
     </div>
   );
 }

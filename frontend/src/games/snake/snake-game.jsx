@@ -5,6 +5,7 @@ import { useScores } from "@/lib/scores";
 import { ArcadeButton } from "@/components/ui/arcade-button";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useOrientation } from "@/hooks/use-orientation";
 import {
   RefreshCw,
   ArrowLeft,
@@ -47,6 +48,7 @@ export function SnakeGame() {
   const { isAuthenticated } = useAuth();
   const { addScore } = useScores();
   const isMobile = useIsMobile();
+  const orientation = useOrientation();
 
   useEffect(() => {
     const storedHighScore = localStorage.getItem("snakeHighScore") || 0;
@@ -305,9 +307,14 @@ export function SnakeGame() {
     <div className="flex flex-col items-center">
       <div
         className={`flex ${
-          isMobile ? "flex-col" : "flex-row"
-        } items-start justify-center gap-6`}
+          isMobile && orientation === "landscape"
+            ? "flex-row items-center justify-center gap-6"
+            : isMobile
+            ? "flex-col items-start justify-center gap-6"
+            : "flex-row items-start justify-center gap-6"
+        }`}
       >
+        {/* Área de juego */}
         <div className="flex flex-col items-center">
           {/* Panel de puntuacion y puntuaciones altas */}
           <div className="flex justify-between w-full max-w-[480px] mb-3">
@@ -378,60 +385,112 @@ export function SnakeGame() {
               </ArcadeButton>
             </div>
           )}
+        </div>
 
-          {/* Controles de teclado (móvil) */}
-          {isMobile && gameStarted && !gameOver && (
-            <div className="mt-4 w-full max-w-[400px]">
-              <div className="flex justify-center mb-4">
+        {/* Controles móviles en landscape: a la derecha */}
+        {isMobile && orientation === "landscape" && gameStarted && !gameOver && (
+          <div className="flex flex-col items-center justify-center ml-4 min-w-[120px] relative z-50">
+            <ArcadeButton
+              onClick={startGame}
+              variant="green"
+              className="text-black font-pixel flex justify-center items-center gap-1 mb-4 w-20 z-50"
+              size="sm"
+            >
+              <RefreshCw size={16} />
+              Reset
+            </ArcadeButton>
+            {/* Botonera direccional tipo cruceta */}
+            <div className="flex flex-col items-center gap-2 z-50">
+              <ArcadeButton
+                onClick={() => handleMobileDirection(38)} // arriba
+                variant="green"
+                className="w-20 h-20 text-black font-pixel flex items-center justify-center z-50"
+                style={{ touchAction: 'none', position: 'relative' }}
+              >
+                <ArrowUp size={32} />
+              </ArcadeButton>
+              <div className="flex flex-row gap-2">
                 <ArcadeButton
-                  onClick={startGame}
+                  onClick={() => handleMobileDirection(37)} // izquierda
                   variant="green"
-                  className="text-black font-pixel flex justify-center items-center gap-1"
-                  size="sm"
+                  className="w-20 h-20 text-black font-pixel flex items-center justify-center z-50"
+                  style={{ touchAction: 'none', position: 'relative' }}
                 >
-                  <RefreshCw size={16} />
-                  Reset
+                  <ArrowLeft size={32} />
+                </ArcadeButton>
+                <ArcadeButton
+                  onClick={() => handleMobileDirection(40)} // abajo
+                  variant="green"
+                  className="w-20 h-20 text-black font-pixel flex items-center justify-center z-50"
+                  style={{ touchAction: 'none', position: 'relative' }}
+                >
+                  <ArrowDown size={32} />
+                </ArcadeButton>
+                <ArcadeButton
+                  onClick={() => handleMobileDirection(39)} // derecha
+                  variant="green"
+                  className="w-20 h-20 text-black font-pixel flex items-center justify-center z-50"
+                  style={{ touchAction: 'none', position: 'relative' }}
+                >
+                  <ArrowRight size={32} />
                 </ArcadeButton>
               </div>
+            </div>
+          </div>
+        )}
 
-              <div className="flex flex-col items-center gap-2">
+        {/* Controles móviles en portrait: debajo */}
+        {isMobile && orientation !== "landscape" && gameStarted && !gameOver && (
+          <div className="mt-4 w-full max-w-[400px]">
+            <div className="flex justify-center mb-4">
+              <ArcadeButton
+                onClick={startGame}
+                variant="green"
+                className="text-black font-pixel flex justify-center items-center gap-1"
+                size="sm"
+              >
+                <RefreshCw size={16} />
+                Reset
+              </ArcadeButton>
+            </div>
+
+            <div className="flex flex-col items-center gap-2">
+              <ArcadeButton
+                onClick={() => handleMobileDirection(38)} // arriba
+                variant="green"
+                className="w-16 h-16 text-black font-pixel flex items-center justify-center"
+              >
+                <ArrowUp size={24} />
+              </ArcadeButton>
+
+              <div className="flex gap-2 mt-1">
                 <ArcadeButton
-                  onClick={() => handleMobileDirection(38)} // arriba
+                  onClick={() => handleMobileDirection(37)} // izquierda
                   variant="green"
                   className="w-16 h-16 text-black font-pixel flex items-center justify-center"
                 >
-                  <ArrowUp size={24} />
+                  <ArrowLeft size={24} />
                 </ArcadeButton>
 
-                <div className="flex gap-2 mt-1">
-                  <ArcadeButton
-                    onClick={() => handleMobileDirection(37)} // izquierda
-                    variant="green"
-                    className="w-16 h-16 text-black font-pixel flex items-center justify-center"
-                  >
-                    <ArrowLeft size={24} />
-                  </ArcadeButton>
+                <ArcadeButton
+                  onClick={() => handleMobileDirection(40)} // abajo
+                  variant="green"
+                  className="w-16 h-16 text-black font-pixel flex items-center justify-center"
+                >
+                  <ArrowDown size={24} />
+                </ArcadeButton>
 
-                  <ArcadeButton
-                    onClick={() => handleMobileDirection(40)} // abajo
-                    variant="green"
-                    className="w-16 h-16 text-black font-pixel flex items-center justify-center"
-                  >
-                    <ArrowDown size={24} />
-                  </ArcadeButton>
-
-                  <ArcadeButton
-                    onClick={() => handleMobileDirection(39)} // derecha
-                    variant="green"
-                    className="w-16 h-16 text-black font-pixel flex items-center justify-center"
-                  >
-                    <ArrowRight size={24} />
-                  </ArcadeButton>
-                </div>
+                <ArcadeButton
+                  onClick={() => handleMobileDirection(39)} // derecha
+                  variant="green"
+                  className="w-16 h-16 text-black font-pixel flex items-center justify-center"
+                >
+                  <ArrowRight size={24} />
+                </ArcadeButton>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Panel lateral con instrucciones */}
         <div
