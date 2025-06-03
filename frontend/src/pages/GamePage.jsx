@@ -57,7 +57,7 @@ export default function GamePage() {
         return (
           <div className="text-center py-12">
             <span className="text-2xl mb-4 text-yellow-400">
-              EN DESARROLLO
+             🚧 THIS GAME IS IN DEVELOPMENT 🚧
             </span>
           </div>
         );

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 
 import { CyberButton } from '@/components/ui/cyber-button';
+import GameOverGlitchText from '@/games/tetris/GameOverGlitchText';
 
 export function GameCard({ game }) {
   const bgColors = {
@@ -95,19 +96,18 @@ export function GameCard({ game }) {
           </div>
         )}
       </div>
-      
       <div className="flex flex-col justify-between p-4 flex-grow">
         <div>
-          <h3 className="font-pixel text-2xl mb-1 text-white">{game.name}</h3>
+          <h3 className="font-pixel text-2xl mb-1 text-white">
+            <GameOverGlitchText text={game.name} className="text-2xl md:text-3xl" />
+          </h3>
           <div className="flex items-center space-x-2 mb-3">
             <span className={`font-pixel text-xs text-arcade-neon-${textColors[game.category]}`}>
               {game.category.charAt(0).toUpperCase() + game.category.slice(1)}
             </span>
-            
           </div>
           <p className="text-gray-400 text-sm mb-4 font-pixel">{game.description}</p>
         </div>
-        
         <Link to={game.path} className="w-full flex justify-center">
           <CyberButton>PLAY</CyberButton>
         </Link>
