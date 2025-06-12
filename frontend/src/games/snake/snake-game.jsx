@@ -86,7 +86,7 @@ export function SnakeGame() {
       });
       newApple = createApple();
       setApple(newApple);
-      audio.playLineClear(); // Reproduce sonido de comer 
+      audio.playLineClear(); // Reproduce sonido de comer
     } else {
       snakeCopy.pop();
     }

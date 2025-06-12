@@ -149,7 +149,7 @@ export function PongGame() {
         // Punto para IA
         if (x < 0) {
           setAiScore((s) => s + 1);
-          audio.current?.playGameOver();
+          audio.current?.playDraw(); // Sonido de empate al encajar gol
           resetAfterGoal(-BALL_SPEED);
           return prev; // No mover la pelota hasta terminar la cuenta atrás
         }
@@ -212,7 +212,7 @@ export function PongGame() {
   // Sonido de victoria/derrota
   useEffect(() => {
     if (!gameOver) return;
-    if (playerScore >= WIN_SCORE) audio.current?.playStart();
+    if (playerScore >= WIN_SCORE) audio.current?.playWin();
     else if (aiScore >= WIN_SCORE) audio.current?.playGameOver();
   }, [gameOver, playerScore, aiScore]);
 

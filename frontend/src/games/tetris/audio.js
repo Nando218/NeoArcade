@@ -52,7 +52,15 @@ export class Audio {
   }
 
   playRotate() {
-    this.createOscillator(330, 'sine', 0.08);
+    if (this.isMuted) return;
+    // Remove any previous rotate audio
+    if (this._rotateAudio) {
+      this._rotateAudio.pause();
+      this._rotateAudio.currentTime = 0;
+    }
+    this._rotateAudio = new window.Audio("https://res.cloudinary.com/dgzgzx9ov/video/upload/v1749722181/rotate_o6byco.mp3");
+    this._rotateAudio.volume = 0.7;
+    this._rotateAudio.play().catch(() => {});
   }
 
   playLand() {
@@ -60,9 +68,15 @@ export class Audio {
   }
 
   playLineClear() {
-    this.createOscillator(440, 'square', 0.1);
-    setTimeout(() => this.createOscillator(660, 'square', 0.1), 100);
-    setTimeout(() => this.createOscillator(880, 'square', 0.2), 200);
+    if (this.isMuted) return;
+    // Remove any previous line clear audio
+    if (this._lineClearAudio) {
+      this._lineClearAudio.pause();
+      this._lineClearAudio.currentTime = 0;
+    }
+    this._lineClearAudio = new window.Audio("https://res.cloudinary.com/dgzgzx9ov/video/upload/v1749722429/lineclear_xz2u7f.mp3");
+    this._lineClearAudio.volume = 0.7;
+    this._lineClearAudio.play().catch(() => {});
   }
 
   playHardDrop() {
@@ -71,11 +85,15 @@ export class Audio {
   }
 
   playGameOver() {
-    for (let i = 0; i < 10; i++) {
-      setTimeout(() => {
-        this.createOscillator(220 - i * 10, 'sawtooth', 0.1);
-      }, i * 100);
+    if (this.isMuted) return;
+    // Remove any previous game over audio
+    if (this._gameOverAudio) {
+      this._gameOverAudio.pause();
+      this._gameOverAudio.currentTime = 0;
     }
+    this._gameOverAudio = new window.Audio("https://res.cloudinary.com/dgzgzx9ov/video/upload/v1749721838/gameover_zdu5r1.mp3");
+    this._gameOverAudio.volume = 0.7;
+    this._gameOverAudio.play().catch(() => {});
   }
 
   playStart() {

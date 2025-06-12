@@ -42,26 +42,44 @@ export class Audio {
     this.createOscillator(220, 'sine', 0.05);
   }
   playRotate() {
-    this.createOscillator(330, 'sine', 0.08);
+    if (this.isMuted) return;
+    // Remove any previous rotate audio
+    if (this._rotateAudio) {
+      this._rotateAudio.pause();
+      this._rotateAudio.currentTime = 0;
+    }
+    this._rotateAudio = new window.Audio("https://res.cloudinary.com/dgzgzx9ov/video/upload/v1749722181/rotate_o6byco.mp3");
+    this._rotateAudio.volume = 0.7;
+    this._rotateAudio.play().catch(() => {});
   }
   playLand() {
     this.createOscillator(180, 'triangle', 0.1);
   }
   playLineClear() {
-    this.createOscillator(440, 'square', 0.1);
-    setTimeout(() => this.createOscillator(660, 'square', 0.1), 100);
-    setTimeout(() => this.createOscillator(880, 'square', 0.2), 200);
+    if (this.isMuted) return;
+    // Detener cualquier audio anterior de line clear
+    if (this._lineClearAudio) {
+      this._lineClearAudio.pause();
+      this._lineClearAudio.currentTime = 0;
+    }
+    this._lineClearAudio = new window.Audio("https://res.cloudinary.com/dgzgzx9ov/video/upload/v1749722429/lineclear_xz2u7f.mp3");
+    this._lineClearAudio.volume = 1.0;
+    this._lineClearAudio.play().catch(() => {});
   }
   playHardDrop() {
     this.createOscillator(180, 'triangle', 0.05);
     setTimeout(() => this.createOscillator(150, 'triangle', 0.2), 30);
   }
   playGameOver() {
-    for (let i = 0; i < 10; i++) {
-      setTimeout(() => {
-        this.createOscillator(220 - i * 10, 'sawtooth', 0.1);
-      }, i * 100);
+    if (this.isMuted) return;
+    // Detener cualquier audio de derrota anterior
+    if (this._gameOverAudio) {
+      this._gameOverAudio.pause();
+      this._gameOverAudio.currentTime = 0;
     }
+    this._gameOverAudio = new window.Audio("https://res.cloudinary.com/dgzgzx9ov/video/upload/v1749721838/gameover_zdu5r1.mp3");
+    this._gameOverAudio.volume = 1.0;
+    this._gameOverAudio.play().catch(() => {});
   }
   playStart() {
     for (let i = 0; i < 3; i++) {
@@ -76,6 +94,27 @@ export class Audio {
         this.createOscillator(330 - i * 110, 'sine', 0.1);
       }, i * 100);
     }
+  }
+  playDraw() {
+    if (this.isMuted) return;
+    if (this._drawAudio) {
+      this._drawAudio.pause();
+      this._drawAudio.currentTime = 0;
+    }
+    this._drawAudio = new window.Audio("https://res.cloudinary.com/dgzgzx9ov/video/upload/v1749723365/draw_bvx6tm.mp3");
+    this._drawAudio.volume = 0.7;
+    this._drawAudio.play().catch(() => {});
+  }
+  playWin() {
+    if (this.isMuted) return;
+    // Detener cualquier audio de victoria anterior
+    if (this._winAudio) {
+      this._winAudio.pause();
+      this._winAudio.currentTime = 0;
+    }
+    this._winAudio = new window.Audio("https://res.cloudinary.com/dgzgzx9ov/video/upload/v1749723986/win_dsg3gi.mp3");
+    this._winAudio.volume = 1.0;
+    this._winAudio.play().catch(() => {});
   }
   toggleMute() {
     this.isMuted = !this.isMuted;

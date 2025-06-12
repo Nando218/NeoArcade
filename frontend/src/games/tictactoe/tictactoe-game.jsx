@@ -57,6 +57,8 @@ export function TicTacToeGame() {
     setBoard(newBoard);
     setIsPlayerTurn(false);
 
+    audio.playRotate(); // Sonido al rellenar casilla
+
     // Solo reproducir sonido si el movimiento es dentro del juego, no al iniciar desde la card
     if (gameStatus === "playing") {
       audio.playMove();
@@ -126,12 +128,13 @@ export function TicTacToeGame() {
       } else {
         toast.success("Victory!");
       }
-      audio.playLineClear(); // Reproducir sonido de victoria
+      audio.playWin(); // Reproducir sonido de victoria
     } else if (result === "ai") {
       toast.error("You lose. Try again.");
       audio.playGameOver(); // Reproducir sonido de derrota
     } else {
       toast.info("Draw!");
+      audio.playDraw(); // Reproducir sonido de empate
     }
   };
 

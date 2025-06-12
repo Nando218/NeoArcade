@@ -108,7 +108,7 @@ export function Connect4Game() {
     const newBoard = board.map(rowArr => [...rowArr]);
     newBoard[row][col] = PLAYER;
     setBoard(newBoard);
-    audio.playMove(); // sonido de movimiento
+    audio.playRotate(); // sonido de colocar ficha
     const result = checkWinner(newBoard);
     if (result) {
       endGame(result);
@@ -131,7 +131,7 @@ export function Connect4Game() {
     const newBoard = b.map(rowArr => [...rowArr]);
     newBoard[row][col] = AI;
     setBoard(newBoard);
-    audio.playMove(); // sonido de movimiento IA
+    audio.playRotate(); // sonido de colocar ficha IA
     const result = checkWinner(newBoard);
     if (result) {
       endGame(result);
@@ -143,13 +143,15 @@ export function Connect4Game() {
   const endGame = async (result) => {
     setGameOver(true);
     setWinner(result);
-    if (result === PLAYER && isAuthenticated) {
-      try {
-        await addScore({ gameId: "connect4", points: 100 });
-        toast.success("Victory! +100 points");
-        audio.playLineClear(); // sonido de victoria
-      } catch {
-        toast.error("Error saving score");
+    if (result === PLAYER) {
+      audio.playWin(); // sonido de victoria (siempre, autenticado o no)
+      if (isAuthenticated) {
+        try {
+          await addScore({ gameId: "connect4", points: 100 });
+          toast.success("Victory! +100 points");
+        } catch {
+          toast.error("Error saving score");
+        }
       }
     } else if (result === AI) {
       toast.error("You lost. Try again.");
