@@ -5,6 +5,7 @@ import { useAuth } from "@/lib/auth";
 import { toast } from "sonner";
 import GameOverGlitchText from "../tetris/GameOverGlitchText";
 import { Audio } from "../audio";
+import Connect4Music from "./Connect4Music";
 
 // Parámetros del tablero
 const ROWS = 6;
@@ -87,6 +88,7 @@ export function Connect4Game() {
   const [currentPlayer, setCurrentPlayer] = useState(PLAYER);
   const [gameOver, setGameOver] = useState(false);
   const [winner, setWinner] = useState(null);
+  const [musicMuted, setMusicMuted] = useState(false);
   const { isAuthenticated } = useAuth();
   const { addScore } = useScores();
 
@@ -160,6 +162,7 @@ export function Connect4Game() {
 
   return (
     <div className="flex flex-col items-center justify-center gap-2 w-full px-1">
+      <Connect4Music play={true} muted={musicMuted} />
       <div className="relative p-2 sm:p-4 rounded-2xl shadow-2xl border border-green-500 w-full max-w-[540px] min-h-[320px] sm:min-h-[520px] flex items-center justify-center bg-transparent">
         {/* Mensaje de victoria superpuesto */}
         {gameOver && winner === 1 && (
@@ -202,7 +205,18 @@ export function Connect4Game() {
           </div>
         )}
       </div>
-      <ArcadeButton onClick={resetGame} className="w-full max-w-[320px] mt-2">Reset game</ArcadeButton>
+      <div className="flex flex-row justify-center items-center w-full max-w-[320px] mt-2 gap-2">
+        <ArcadeButton onClick={resetGame} className="w-full">Reset game</ArcadeButton>
+        <ArcadeButton
+          onClick={() => setMusicMuted((m) => !m)}
+          variant="purple"
+          className="font-pixel flex gap-2 items-center"
+          size="sm"
+          aria-label={musicMuted ? "Unmute music" : "Mute music"}
+        >
+          {musicMuted ? "🔇" : "🔊"}
+        </ArcadeButton>
+      </div>
     </div>
   );
 }

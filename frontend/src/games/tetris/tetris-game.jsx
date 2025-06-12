@@ -17,6 +17,7 @@ import {
   RotateCcw
 } from "lucide-react";
 import GameOverGlitchText from "./GameOverGlitchText";
+import TetrisMusic from "./TetrisMusic";
 
 // FORMAS DE LOS TETRIMINOS
 const TETROMINOS = {
@@ -136,6 +137,7 @@ export function TetrisGame() {
   const [highScore, setHighScore] = useState(0);
   const [stage, setStage] = useState(createStage());
   const [nextTetromino, setNextTetromino] = useState(null);
+  const [musicMuted, setMusicMuted] = useState(false);
   
   // Estado del jugador - con tetrimino, posición y detección de colisión
   const [player, setPlayer] = useState({
@@ -612,6 +614,7 @@ export function TetrisGame() {
 
   return (
     <div className="flex flex-col items-center">
+      <TetrisMusic play={gameStarted || gameOver} muted={musicMuted} />
       <div className={`flex ${isMobile ? "flex-col" : "flex-row"} items-start justify-center gap-6`}>
         <div className="flex flex-col items-center">
           {/* Panel de puntuacion y nivel */}
@@ -716,6 +719,16 @@ export function TetrisGame() {
                 <RefreshCw size={18} />
                 Reset
               </ArcadeButton>
+
+              <ArcadeButton
+                onClick={() => setMusicMuted(m => !m)}
+                variant="purple"
+                className="font-pixel flex gap-2 items-center"
+                size="sm"
+                aria-label={musicMuted ? 'Unmute music' : 'Mute music'}
+              >
+                {musicMuted ? '🔇' : '🔊'}
+              </ArcadeButton>
             </div>
           )}
 
@@ -804,7 +817,6 @@ export function TetrisGame() {
             </div>
           )}
         </div>
-
         {/* Panel lateral con la pieza siguiente e instrucciones */}
         <div className={`flex flex-col gap-4 ${isMobile ? "w-full mt-4" : "w-[220px]"}`}>
           {/* preview de la siguiente pieza */}
@@ -830,8 +842,6 @@ export function TetrisGame() {
               
             </ul>
           </div>
-          
-          
         </div>
       </div>
     </div>

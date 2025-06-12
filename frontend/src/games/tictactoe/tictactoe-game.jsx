@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { ArcadeButton } from "@/components/ui/arcade-button";
 import { Audio } from "../audio";
 import GameOverGlitchText from "../tetris/GameOverGlitchText";
+import TicTacToeMusic from "./TicTacToeMusic";
 
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useScores } from "@/lib/scores";
@@ -16,6 +17,7 @@ export function TicTacToeGame() {
   const [gameStatus, setGameStatus] = useState("playing"); // Estado inicial cambiado a "playing" en vez de "waiting"
   const [winner, setWinner] = useState(null); // null, 'player', 'ai', 'draw'
   const [difficulty, setDifficulty] = useState("normal"); // fácil, normal, difícil
+  const [musicMuted, setMusicMuted] = useState(false);
   const isMobile = useIsMobile();
   const { addScore } = useScores();
   const { isAuthenticated } = useAuth();
@@ -261,6 +263,7 @@ export function TicTacToeGame() {
 
   return (
     <div className="flex flex-col items-center justify-center w-full max-w-lg px-4">
+      <TicTacToeMusic play={gameStatus === "playing" || gameStatus === "ended"} muted={musicMuted} />
       <div className="relative w-full flex justify-center items-center min-h-[320px]">
         {/* Game Over/Draw Overlay */}
         {gameStatus === "ended" && winner === "draw" && (
@@ -278,10 +281,26 @@ export function TicTacToeGame() {
             <GameOverGlitchText text="YOU LOSE!" className="mb-4 text-red-600" />
           </div>
         )}
-        {/* Tablero de juego */}
-        <div className="grid grid-cols-3 gap-2 mx-auto">
+        {/* Tablero de juego con botón de mute en la esquina inferior derecha */}
+        <div className="grid grid-cols-3 gap-2 mx-auto relative">
           {board.map((_, index) => (
-            <div key={index}>{renderCell(index)}</div>
+            <div key={index} className="relative">
+              {renderCell(index)}
+              {/* Botón de mute al lado de la casilla inferior derecha */}
+              {index === 8 && (
+                <div className="absolute right-[-70px] bottom-0 flex items-center">
+                  <ArcadeButton
+                    onClick={() => setMusicMuted((m) => !m)}
+                    variant="purple"
+                    className="font-pixel flex gap-2 items-center"
+                    size="sm"
+                    aria-label={musicMuted ? "Unmute music" : "Mute music"}
+                  >
+                    {musicMuted ? "🔇" : "🔊"}
+                  </ArcadeButton>
+                </div>
+              )}
+            </div>
           ))}
         </div>
       </div>

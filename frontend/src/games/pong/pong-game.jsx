@@ -6,6 +6,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { toast } from "sonner";
 import { Audio } from "../audio";
 import GameOverGlitchText from "../tetris/GameOverGlitchText";
+import PongMusic from "./PongMusic";
 
 // Parámetros originales del repositorio react-pong
 const WIDTH = 600;
@@ -40,6 +41,7 @@ export function PongGame() {
   const audio = useRef(null);
   // Estado para dirección de movimiento
   const [moveDirection, setMoveDirection] = useState(null);
+  const [musicMuted, setMusicMuted] = useState(false);
 
   // Bloquear scroll cuando el juego está activo
   useEffect(() => {
@@ -273,6 +275,7 @@ export function PongGame() {
 
   return (
     <div className="flex flex-col items-center justify-center h-full">
+      <PongMusic play={true} muted={musicMuted} />
       {/* Imagen de resultado (win/lose) */}
       {gameOver && (
         <>
@@ -300,7 +303,7 @@ export function PongGame() {
         tabIndex={0}
         onFocus={(e) => e.target.focus()}
       />
-      <div className="flex justify-between w-full max-w-[200px] px-4 mt-4">
+      <div className="flex justify-between w-full max-w-[300px] px-4 mt-4 gap-2">
         <ArcadeButton
           onClick={startGame}
           disabled={isRunning}
@@ -308,6 +311,15 @@ export function PongGame() {
           variant="green"
         >
           {gameOver ? "Reset game" : isRunning ? "Playing" : "Start"}
+        </ArcadeButton>
+        <ArcadeButton
+          onClick={() => setMusicMuted((m) => !m)}
+          variant="purple"
+          className="font-pixel flex gap-2 items-center"
+          size="sm"
+          aria-label={musicMuted ? "Unmute music" : "Mute music"}
+        >
+          {musicMuted ? "🔇" : "🔊"}
         </ArcadeButton>
       </div>
       {/* Cuenta atrás */}

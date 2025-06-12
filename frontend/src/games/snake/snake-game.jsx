@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Audio } from "../audio";
 import GameOverGlitchText from "../tetris/GameOverGlitchText";
+import SnakeMusic from "./SnakeMusic";
 
 // Tamaño del canvas
 const CANVAS_SIZE = [480, 320];
@@ -44,6 +45,7 @@ export function SnakeGame() {
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
   const [gameStarted, setGameStarted] = useState(false);
+  const [musicMuted, setMusicMuted] = useState(false);
 
   const { isAuthenticated } = useAuth();
   const { addScore } = useScores();
@@ -305,6 +307,7 @@ export function SnakeGame() {
 
   return (
     <div className="flex flex-col items-center">
+      <SnakeMusic play={gameStarted || gameOver} muted={musicMuted} />
       <div
         className={`flex ${
           isMobile && orientation === "landscape"
@@ -382,6 +385,15 @@ export function SnakeGame() {
               >
                 <RefreshCw size={18} />
                 Reset
+              </ArcadeButton>
+              <ArcadeButton
+                onClick={() => setMusicMuted(m => !m)}
+                variant="purple"
+                className="font-pixel flex gap-2 items-center"
+                size="sm"
+                aria-label={musicMuted ? 'Unmute music' : 'Mute music'}
+              >
+                {musicMuted ? '🔇' : '🔊'}
               </ArcadeButton>
             </div>
           )}
