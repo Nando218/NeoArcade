@@ -91,7 +91,7 @@ const randomTetromino = () => {
 const STAGE_WIDTH = 12;
 const STAGE_HEIGHT = 20;
 const ROWPOINTS = [40, 100, 300, 1200]; // Puntos por 1, 2, 3, 4 líneas
-const DROPTIME = 1000; // Tiempo de caída inicial
+const DROPTIME = 700; // Tiempo de caída inicial (más rápido)
 
 // Crear escenario vacío - Array 2D lleno de ceros
 const createStage = () =>
@@ -492,7 +492,7 @@ export function TetrisGame() {
 
   // Manejar nivel y velocidad del juego
   useEffect(() => {
-    const linePerLevel = 10;
+    const linePerLevel = 5; // Subida de nivel más frecuente
     const newLevel = Math.floor(rows / linePerLevel) + 1;
     
     if (newLevel !== level) {
@@ -612,9 +612,15 @@ export function TetrisGame() {
     }
   };
 
+  useEffect(() => {
+    // Iniciar música al entrar en la ventana del juego
+    setMusicMuted(false);
+  }, []);
+
   return (
     <div className="flex flex-col items-center">
-      <TetrisMusic play={gameStarted || gameOver} muted={musicMuted} />
+      {/* La música debe sonar siempre al entrar en la página, no solo cuando empieza el juego */}
+      <TetrisMusic play={!musicMuted} muted={musicMuted} />
       <div className={`flex ${isMobile ? "flex-col" : "flex-row"} items-start justify-center gap-6`}>
         <div className="flex flex-col items-center">
           {/* Panel de puntuacion y nivel */}

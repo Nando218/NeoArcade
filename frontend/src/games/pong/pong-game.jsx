@@ -8,14 +8,14 @@ import { Audio } from "../audio";
 import GameOverGlitchText from "../tetris/GameOverGlitchText";
 import PongMusic from "./PongMusic";
 
-// Parámetros originales del repositorio react-pong
+// Parámetros del juego
 const WIDTH = 600;
 const HEIGHT = 400;
 const PADDLE_WIDTH = 10;
 const PADDLE_HEIGHT = 60;
 const BALL_SIZE = 10;
-const PLAYER_SPEED = 14;
-const AI_SPEED = 6.2; // IA más lenta para menor dificultad
+const PLAYER_SPEED = 12;
+const AI_SPEED = 6.35; // Velocidad de la IA
 const BALL_SPEED = 7;
 const WIN_SCORE = 10;
 
@@ -42,6 +42,7 @@ export function PongGame() {
   // Estado para dirección de movimiento
   const [moveDirection, setMoveDirection] = useState(null);
   const [musicMuted, setMusicMuted] = useState(false);
+  const [showControls, setShowControls] = useState(false);
 
   // Bloquear scroll cuando el juego está activo
   useEffect(() => {
@@ -80,9 +81,17 @@ export function PongGame() {
     ctx.fillRect(10, playerY, PADDLE_WIDTH, PADDLE_HEIGHT);
     ctx.fillStyle = "#ff00ea";
     ctx.fillRect(WIDTH - 20, aiY, PADDLE_WIDTH, PADDLE_HEIGHT);
-    // Pelota
+    // Pelota (ahora círculo)
     ctx.fillStyle = "#fff";
-    ctx.fillRect(ball.x, ball.y, BALL_SIZE, BALL_SIZE);
+    ctx.beginPath();
+    ctx.arc(
+      ball.x + BALL_SIZE / 2,
+      ball.y + BALL_SIZE / 2,
+      BALL_SIZE / 2,
+      0,
+      2 * Math.PI
+    );
+    ctx.fill();
     // Puntuación
     ctx.font = "32px monospace";
     ctx.fillStyle = "#00fff7";
@@ -127,38 +136,41 @@ export function PongGame() {
         let { x, y, dx, dy } = prev;
         x += dx;
         y += dy;
-        // Rebote arriba/abajo
-        if (y <= 0 || y + BALL_SIZE >= HEIGHT) {
-          dy = -dy;
-          audio.current?.playMove();
-        }
-        // Rebote jugador
-        if (x <= 20 && y + BALL_SIZE > playerY && y < playerY + PADDLE_HEIGHT) {
-          dx = -dx;
-          audio.current?.playMove();
-        }
-        // Rebote IA
-        if (
-          x + BALL_SIZE >= WIDTH - 20 &&
-          y + BALL_SIZE > aiY &&
-          y < aiY + PADDLE_HEIGHT
-        ) {
-          dx = -dx;
-          audio.current?.playMove();
-        }
         // Punto para IA
         if (x < 0) {
           setAiScore((s) => s + 1);
           audio.current?.playDraw(); // Sonido de empate al encajar gol
           resetAfterGoal(-BALL_SPEED);
-          return prev; // No mover la pelota hasta terminar la cuenta atrás
+          // Devolver pelota quieta en el centro para evitar rebotes
+          return { x: WIDTH / 2, y: HEIGHT / 2, dx: 0, dy: 0 };
         }
         // Punto para jugador
         if (x > WIDTH) {
           setPlayerScore((s) => s + 1);
           audio.current?.playLineClear();
           resetAfterGoal(BALL_SPEED);
-          return prev; // No mover la pelota hasta terminar la cuenta atrás
+          // Devolver pelota quieta en el centro para evitar rebotes
+          return { x: WIDTH / 2, y: HEIGHT / 2, dx: 0, dy: 0 };
+        }
+        // Rebote arriba/abajo
+        if (y <= 0 || y + BALL_SIZE >= HEIGHT) {
+          dy = -dy;
+          audio.current?.playMove();
+        }
+        // Rebote jugador SOLO si la pelota está dentro del campo
+        if (x >= 0 && x <= 20 && y + BALL_SIZE > playerY && y < playerY + PADDLE_HEIGHT) {
+          dx = -dx;
+          audio.current?.playMove();
+        }
+        // Rebote IA SOLO si la pelota está dentro del campo
+        if (
+          x + BALL_SIZE <= WIDTH &&
+          x + BALL_SIZE >= WIDTH - 20 &&
+          y + BALL_SIZE > aiY &&
+          y < aiY + PADDLE_HEIGHT
+        ) {
+          dx = -dx;
+          audio.current?.playMove();
         }
         return { x, y, dx, dy };
       });
@@ -195,7 +207,9 @@ export function PongGame() {
       setCountdownStage("go");
       setTimeout(() => {
         setCountdownStage(null);
-        setBall((b) => ({ ...b, dx: newDx, dy: BALL_SPEED }));
+        // Asegura que dy nunca sea 0 y alterna dirección vertical aleatoriamente
+        const dy = Math.random() < 0.5 ? BALL_SPEED : -BALL_SPEED;
+        setBall((b) => ({ ...b, dx: newDx, dy }));
       }, 1000);
     }, 1000);
   }
@@ -289,39 +303,78 @@ export function PongGame() {
           </div>
         </>
       )}
-      <canvas
-        ref={canvasRef}
-        width={WIDTH}
-        height={HEIGHT}
-        className="border-2 border-arcade-neon-green rounded-lg bg-black"
-        style={{
-          touchAction: "none",
-          maxWidth: "100%",
-          height: isMobile ? 240 : 400,
-        }}
-        onTouchMove={handleTouch}
-        tabIndex={0}
-        onFocus={(e) => e.target.focus()}
-      />
-      <div className="flex justify-between w-full max-w-[300px] px-4 mt-4 gap-2">
-        <ArcadeButton
-          onClick={startGame}
-          disabled={isRunning}
-          className="w-full"
-          variant="green"
-        >
-          {gameOver ? "Reset game" : isRunning ? "Playing" : "Start"}
-        </ArcadeButton>
-        <ArcadeButton
-          onClick={() => setMusicMuted((m) => !m)}
-          variant="purple"
-          className="font-pixel flex gap-2 items-center"
-          size="sm"
-          aria-label={musicMuted ? "Unmute music" : "Mute music"}
-        >
-          {musicMuted ? "🔇" : "🔊"}
-        </ArcadeButton>
+      <div className="relative w-full flex justify-center items-start mt-4">
+        {/* Campo de juego centrado */}
+        <div className="z-10 flex flex-col items-center mx-auto">
+          <canvas
+            ref={canvasRef}
+            width={WIDTH}
+            height={HEIGHT}
+            className="border-2 border-arcade-neon-green rounded-lg bg-black"
+            style={{
+              touchAction: "none",
+              maxWidth: "100%",
+              height: isMobile ? 240 : 400,
+            }}
+            onTouchMove={handleTouch}
+            tabIndex={0}
+            onFocus={(e) => e.target.focus()}
+          />
+          <div className="flex justify-between w-full max-w-[300px] px-4 mt-4 gap-2">
+            <ArcadeButton
+              onClick={startGame}
+              disabled={isRunning}
+              className="w-full"
+              variant="green"
+            >
+              {gameOver ? "Reset game" : isRunning ? "Playing" : "Start"}
+            </ArcadeButton>
+            <ArcadeButton
+              onClick={() => setMusicMuted((m) => !m)}
+              variant="purple"
+              className="font-pixel flex gap-2 items-center"
+              size="sm"
+              aria-label={musicMuted ? "Unmute music" : "Mute music"}
+            >
+              {musicMuted ? "🔇" : "🔊"}
+            </ArcadeButton>
+            <ArcadeButton
+              onClick={() => setShowControls((v) => !v)}
+              variant="purple"
+              className="font-pixel flex gap-2 items-center"
+              size="sm"
+              aria-label="Show controls"
+            >
+              🎮
+            </ArcadeButton>
+          </div>
+        </div>
+        {/* Elimina el cuadro lateral fijo de controles */}
       </div>
+      {/* Modal de controles */}
+      {showControls && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+          <div className="bg-arcade-dark border border-arcade-neon-blue/30 rounded-md p-6 min-w-[220px] max-w-[90vw] shadow-2xl relative">
+            
+            <h3 className="text-arcade-neon-blue font-pixel mb-4 text-center text-lg">
+              Controls
+            </h3>
+            <ul className="text-sm text-gray-300 font-pixel space-y-1 mb-2">
+              <li>⬆️ / W : Move up</li>
+              <li>⬇️ / S : Move down</li>
+                            
+              <li>🔊 : Toggle music</li>
+            </ul>
+            <ArcadeButton
+              onClick={() => setShowControls(false)}
+              variant="purple"
+              className="w-full mt-4"
+            >
+              Close
+            </ArcadeButton>
+          </div>
+        </div>
+      )}
       {/* Cuenta atrás */}
       {countdownStage && (
         <div className="absolute left-0 top-0 w-full h-full flex items-center justify-center z-40 pointer-events-none">

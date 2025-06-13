@@ -307,7 +307,7 @@ export function SnakeGame() {
 
   return (
     <div className="flex flex-col items-center">
-      <SnakeMusic play={gameStarted || gameOver} muted={musicMuted} />
+      <SnakeMusic play={true} muted={musicMuted} />
       <div
         className={`flex ${
           isMobile && orientation === "landscape"
