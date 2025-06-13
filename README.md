@@ -109,5 +109,5 @@ npx vitest run
 
 👥 2 players mode
 
-🎵 Music and sound effects
+🏆 Achievements and gamification system
 
