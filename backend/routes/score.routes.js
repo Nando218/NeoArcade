@@ -221,6 +221,28 @@ router.delete('/:id', verifyToken, async (req, res) => {
   }
 });
 
+// Eliminar la puntuación de un usuario para un juego específico (para testing)
+router.delete('/user/:userId/game/:gameId', verifyToken, async (req, res) => {
+  try {
+    const { userId, gameId } = req.params;
+    // Solo el propio usuario o un admin puede borrar
+    if (parseInt(userId) !== req.userId) {
+      return res.status(403).json({ message: 'Forbidden' });
+    }
+    const result = await pool.query(
+      'DELETE FROM scores WHERE user_id = $1 AND game_id = $2 RETURNING *',
+      [userId, gameId]
+    );
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: 'Score not found' });
+    }
+    res.status(200).json({ message: 'Score deleted' });
+  } catch (error) {
+    console.error('Delete user/game score error:', error);
+    res.status(500).json({ message: 'Failed to delete score' });
+  }
+});
+
 // añadir puntuaciones
 router.post('/', verifyToken, async (req, res) => {
   try {

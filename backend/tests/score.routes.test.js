@@ -68,6 +68,10 @@ describe('Score Routes', () => {
         // Login y obtener token
         const login = await request(app).post('/api/auth/login').send(normalUser);
         const token = login.body.token;
+        // Eliminar cualquier puntuación previa para el usuario y el juego 'snake'
+        await request(app)
+            .delete('/api/scores/user/' + userId + '/game/snake')
+            .set('Authorization', `Bearer ${token}`);
         // Crear nueva puntuación para Snake
         const response = await request(app)
             .post('/api/scores')

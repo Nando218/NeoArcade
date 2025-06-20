@@ -6,7 +6,7 @@ dotenv.config();
 
 let pool;
 if (process.env.NODE_ENV === 'test') {
-  // Usar una base de datos de test (puede ser SQLite o una base específica de test en PostgreSQL)
+  // Usar una base de datos de test 
   pool = new Pool({
     connectionString: process.env.TEST_DATABASE_URL || process.env.DATABASE_URL,
     ssl: process.env.TEST_DATABASE_URL ? false : { rejectUnauthorized: false },

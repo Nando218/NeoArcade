@@ -81,7 +81,7 @@ export function PongGame() {
     ctx.fillRect(10, playerY, PADDLE_WIDTH, PADDLE_HEIGHT);
     ctx.fillStyle = "#ff00ea";
     ctx.fillRect(WIDTH - 20, aiY, PADDLE_WIDTH, PADDLE_HEIGHT);
-    // Pelota (ahora círculo)
+    // Pelota 
     ctx.fillStyle = "#fff";
     ctx.beginPath();
     ctx.arc(
@@ -121,7 +121,7 @@ export function PongGame() {
       } else if (ball.y + BALL_SIZE / 2 < aiY + PADDLE_HEIGHT / 2) {
         setAiY((y) => Math.max(y - AI_SPEED, 0));
       }
-      // Movimiento de la paleta del jugador (fluido)
+      // Movimiento de la paleta del jugador 
       setPlayerY((prevY) => {
         let targetY = prevY;
         if (moveDirection === "up") {

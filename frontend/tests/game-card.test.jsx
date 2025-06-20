@@ -18,7 +18,8 @@ describe('GameCard', () => {
         <GameCard game={game} />
       </MemoryRouter>
     );
-    expect(screen.getByText('Tetris')).toBeInTheDocument();
+    const tetrisElements = screen.getAllByText('Tetris');
+    expect(tetrisElements.length).toBeGreaterThan(0);
     expect(screen.getByText('Classic puzzle game')).toBeInTheDocument();
   });
 
